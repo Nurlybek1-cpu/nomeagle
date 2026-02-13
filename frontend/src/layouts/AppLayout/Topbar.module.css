@@ -15,15 +15,24 @@
   flex-shrink: 0;
 }
 
-/* ── Left: page title ───────────────────────────────────────────────────── */
+/* ── Left: title + breadcrumbs stacked ─────────────────────────────────── */
+
+.left {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+  min-width: 0;
+}
 
 .title {
   font-size: 1.125rem;
   font-weight: 600;
   color: var(--ne-text);
+  line-height: 1.25;
 }
 
-/* ── Right: actions ─────────────────────────────────────────────────────── */
+/* ── Right: actions ────────────────────────────────────────────────────── */
 
 .actions {
   display: flex;

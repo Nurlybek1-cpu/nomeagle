@@ -3,3 +3,6 @@ export type { NavItemProps } from './NavItem';
 
 export { SidebarSection } from './SidebarSection';
 export type { SidebarSectionProps } from './SidebarSection';
+
+export { Breadcrumbs } from './Breadcrumbs';
+export type { BreadcrumbItem, BreadcrumbsProps } from './Breadcrumbs';
