@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Card, CardHeader, CardContent } from '../../../components/ui/Card';
-import { Skeleton } from '../../../components/ui/Skeleton';
+import { Loading, ErrorState } from '../../../components/feedback';
 import {
   CountryLearningCard,
   EmptyStateCard,
@@ -29,78 +29,53 @@ import styles from './DashboardPage.module.css';
    │  └────────────────────────────┴────────────────────────┘│
    └─────────────────────────────────────────────────────────┘
 
-   States: loading → skeleton grid  |  error → message  |  success → content
+   States: loading → <Loading />  |  error → <ErrorState />  |  success → content
    ========================================================================== */
-
-/* ---------- Loading skeleton ---------- */
-
-const DashboardSkeleton: React.FC = () => (
-  <div className={styles.grid}>
-    <div className={styles.left}>
-      <Card>
-        <CardHeader>
-          <Skeleton variant="text" width="60%" height="1.25rem" />
-        </CardHeader>
-        <CardContent>
-          <div className={styles.skeletonCards}>
-            {Array.from({ length: 3 }).map((_, i) => (
-              <Skeleton key={i} variant="rect" height={180} />
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-
-    <div className={styles.right}>
-      {Array.from({ length: 4 }).map((_, i) => (
-        <Skeleton key={i} variant="rect" height={120} />
-      ))}
-    </div>
-  </div>
-);
-
-/* ---------- Error state ---------- */
-
-const DashboardError: React.FC<{ message: string }> = ({ message }) => (
-  <Card>
-    <CardContent className={styles.errorBody}>
-      <span className={styles.errorIcon} aria-hidden="true">⚠️</span>
-      <p className={styles.errorMessage}>{message}</p>
-    </CardContent>
-  </Card>
-);
-
-/* ---------- Page component ---------- */
 
 export const DashboardPage: React.FC = () => {
   const [state, setState] = useState<AsyncState<DashboardResponse>>({
     status: 'loading',
   });
 
-  useEffect(() => {
-    let cancelled = false;
+  const loadDashboard = useCallback(() => {
+    setState({ status: 'loading' });
 
     fetchMockDashboard()
-      .then((data) => {
-        if (!cancelled) setState({ status: 'success', data });
-      })
-      .catch((err) => {
-        if (!cancelled) setState({ status: 'error', error: String(err) });
-      });
-
-    return () => {
-      cancelled = true;
-    };
+      .then((data) => setState({ status: 'success', data }))
+      .catch((err) => setState({ status: 'error', error: String(err) }));
   }, []);
+
+  useEffect(() => {
+    loadDashboard();
+  }, [loadDashboard]);
 
   /* ---- Loading ---- */
   if (state.status === 'loading' || state.status === 'idle') {
-    return <DashboardSkeleton />;
+    return (
+      <div className={styles.grid}>
+        <div className={styles.left}>
+          <Card>
+            <CardContent>
+              <Loading rows={2} columns={2} blockHeight={180} />
+            </CardContent>
+          </Card>
+        </div>
+        <div className={styles.right}>
+          <Loading rows={4} columns={1} blockHeight={120} showHeading={false} />
+        </div>
+      </div>
+    );
   }
 
   /* ---- Error ---- */
   if (state.status === 'error') {
-    return <DashboardError message={state.error} />;
+    return (
+      <Card>
+        <CardContent>
+          <ErrorState message={state.error} onRetry={loadDashboard} />
+        </CardContent>
+      </Card>
+    );
   }
 
   /* ---- Success ---- */
