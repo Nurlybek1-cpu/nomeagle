@@ -1,13 +1,27 @@
 import React from 'react';
 import styles from './Card.module.css';
 
+/* ---------- Utility ---------- */
+const cx = (...classes: (string | undefined | false)[]) =>
+  classes.filter(Boolean).join(' ');
+
 /* ---------- Card ---------- */
 export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
+  /** Adds a subtle lift effect on hover (useful for clickable cards) */
+  hoverable?: boolean;
   children: React.ReactNode;
 }
 
-export const Card: React.FC<CardProps> = ({ className, children, ...rest }) => (
-  <div className={[styles.card, className].filter(Boolean).join(' ')} {...rest}>
+export const Card: React.FC<CardProps> = ({
+  hoverable = false,
+  className,
+  children,
+  ...rest
+}) => (
+  <div
+    className={cx(styles.card, hoverable && styles.hoverable, className)}
+    {...rest}
+  >
     {children}
   </div>
 );
@@ -22,10 +36,7 @@ export const CardHeader: React.FC<CardHeaderProps> = ({
   children,
   ...rest
 }) => (
-  <div
-    className={[styles.header, className].filter(Boolean).join(' ')}
-    {...rest}
-  >
+  <div className={cx(styles.header, className)} {...rest}>
     {children}
   </div>
 );
@@ -40,10 +51,7 @@ export const CardContent: React.FC<CardContentProps> = ({
   children,
   ...rest
 }) => (
-  <div
-    className={[styles.content, className].filter(Boolean).join(' ')}
-    {...rest}
-  >
+  <div className={cx(styles.content, className)} {...rest}>
     {children}
   </div>
 );
@@ -58,10 +66,7 @@ export const CardFooter: React.FC<CardFooterProps> = ({
   children,
   ...rest
 }) => (
-  <div
-    className={[styles.footer, className].filter(Boolean).join(' ')}
-    {...rest}
-  >
+  <div className={cx(styles.footer, className)} {...rest}>
     {children}
   </div>
 );
