@@ -1,0 +1,26 @@
+.card {
+  background-color: var(--ne-surface);
+  border: 1px solid var(--ne-border);
+  border-radius: var(--ne-radius-md);
+  box-shadow: var(--ne-shadow-sm);
+  overflow: hidden;
+}
+
+.header {
+  padding: var(--ne-2) var(--ne-3);
+  border-bottom: 1px solid var(--ne-border);
+  font-weight: 600;
+}
+
+.content {
+  padding: var(--ne-3);
+}
+
+.footer {
+  padding: var(--ne-2) var(--ne-3);
+  border-top: 1px solid var(--ne-border);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--ne-1);
+}
