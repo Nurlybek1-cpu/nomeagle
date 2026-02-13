@@ -1,0 +1,29 @@
+import { Navigate } from 'react-router-dom';
+import type { RouteObject } from 'react-router-dom';
+import { AppLayout } from '../../layouts/AppLayout';
+import { DashboardPage } from '../../pages/app/Dashboard';
+
+/**
+ * Routes nested under /app — protected section of the application.
+ *
+ * Structure:
+ *   /app              → redirect to /app/dashboard
+ *   /app/dashboard    → DashboardPage
+ *
+ * All children render inside AppLayout's <Outlet />.
+ * When auth is added later, wrap `element` with a <ProtectedRoute> guard:
+ *   element: <ProtectedRoute><AppLayout /></ProtectedRoute>
+ */
+export const appRoutes: RouteObject[] = [
+  {
+    path: '/app',
+    element: <AppLayout />,
+    children: [
+      /* /app → redirect to dashboard */
+      { index: true, element: <Navigate to="dashboard" replace /> },
+
+      /* /app/dashboard */
+      { path: 'dashboard', element: <DashboardPage /> },
+    ],
+  },
+];
