@@ -1,0 +1,90 @@
+/* ==========================================================================
+   CountryLearningCard
+   Dashboard country card — left-column item.
+   ========================================================================== */
+
+.card {
+  width: 100%;
+}
+
+/* ---------- Body (inside CardContent) ---------- */
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ne-2);
+}
+
+/* ---- Header row ---- */
+.headerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ne-1);
+}
+
+.identity {
+  display: flex;
+  align-items: center;
+  gap: var(--ne-1);
+  min-width: 0; /* allow truncation */
+}
+
+.flag {
+  font-size: 1.75rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.flagImg {
+  width: var(--ne-4); /* 32px */
+  height: var(--ne-3); /* 24px — 4:3 aspect ratio */
+  object-fit: cover;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.name {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--ne-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ---- Teaser ---- */
+.teaser {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--ne-muted);
+  line-height: 1.5;
+}
+
+/* ---- Last lesson ---- */
+.lastLesson {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--ne-muted);
+}
+
+.lastLessonLabel {
+  font-weight: 600;
+  color: var(--ne-text);
+}
+
+/* ---- Progress row ---- */
+.progressRow {
+  display: flex;
+  align-items: center;
+  gap: var(--ne-1);
+}
+
+.pct {
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--ne-text);
+  min-width: var(--ne-4); /* 32px — avoids layout shift from 0% → 100% */
+  text-align: right;
+}
