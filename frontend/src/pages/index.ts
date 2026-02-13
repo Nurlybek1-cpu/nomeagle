@@ -1,2 +1,2 @@
 /* Pages Barrel Export */
-export { DashboardPage } from './DashboardPage';
+export { DashboardPage } from './app/Dashboard';
