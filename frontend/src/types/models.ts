@@ -35,6 +35,8 @@ export interface UserStats {
   streakDays: number;
   /** Overall answer accuracy (0–100) */
   accuracy: number;
+  /** Lesson completion percentage (0–100) */
+  lessonsCompletedPct: number;
   /** Minutes practised today */
   timeTodayMinutes: number;
   /** Minutes practised this week */

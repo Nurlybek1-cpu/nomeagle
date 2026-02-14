@@ -3,6 +3,7 @@ import { Card } from '../../../../components/ui/Card';
 import { XPLevelSection } from '../xp';
 import { StreakSection } from '../streak';
 import { TimeSpentSection } from '../time';
+import { AccuracySection } from '../accuracy';
 import type { UserStats } from '../../types';
 import styles from './UnifiedStatsCard.module.css';
 
@@ -30,17 +31,6 @@ import styles from './UnifiedStatsCard.module.css';
 
 /* ---------- Shared sub-components ---------- */
 
-/** Section title row — icon + label */
-const SectionHeader: React.FC<{ icon: string; label: string }> = ({
-  icon,
-  label,
-}) => (
-  <div className={styles.sectionHeader}>
-    <span className={styles.sectionIcon} aria-hidden="true">{icon}</span>
-    <h4 className={styles.sectionLabel}>{label}</h4>
-  </div>
-);
-
 /** Horizontal 1px rule between sections */
 const SectionDivider: React.FC = () => (
   <hr className={styles.divider} />
@@ -52,24 +42,7 @@ const SectionDivider: React.FC = () => (
 
 /* Section 3 — Time Spent (delegated to standalone TimeSpentSection component) */
 
-/* ==========================================================================
-   Section 4 — Accuracy
-   ========================================================================== */
-
-interface AccuracySectionProps {
-  accuracy: number;
-}
-
-const AccuracySection: React.FC<AccuracySectionProps> = ({ accuracy }) => (
-  <div className={styles.section}>
-    <SectionHeader icon="🎯" label="Accuracy" />
-    <div className={styles.valueRow}>
-      <span className={styles.bigValue}>{accuracy}</span>
-      <span className={styles.valueSuffix}>%</span>
-    </div>
-    <p className={styles.helpText}>Lessons completed</p>
-  </div>
-);
+/* Section 4 — Accuracy (delegated to standalone AccuracySection component) */
 
 /* ==========================================================================
    Main Component
@@ -109,6 +82,11 @@ export const UnifiedStatsCard: React.FC<UnifiedStatsCardProps> = ({
       />
     </div>
     <SectionDivider />
-    <AccuracySection accuracy={stats.accuracy} />
+    <div className={styles.section}>
+      <AccuracySection
+        accuracyPct={stats.accuracy}
+        completionPct={stats.lessonsCompletedPct}
+      />
+    </div>
   </Card>
 );

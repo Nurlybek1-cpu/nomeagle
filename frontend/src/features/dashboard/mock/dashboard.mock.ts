@@ -16,6 +16,7 @@ export const MOCK_USER_STATS: UserStats = {
   xpToNextLevel: 1_180, // 6 000 − 4 820
   streakDays: 12,
   accuracy: 87,
+  lessonsCompletedPct: 92,
   timeTodayMinutes: 23,
   timeWeekMinutes: 148,
   timeTotalMinutes: 2_340,

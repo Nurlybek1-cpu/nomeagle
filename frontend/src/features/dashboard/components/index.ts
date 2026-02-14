@@ -30,6 +30,10 @@ export type { StreakSectionProps } from './streak';
 export { TimeSpentSection } from './time';
 export type { TimeSpentSectionProps } from './time';
 
+// Accuracy & completion section (two large percentages)
+export { AccuracySection } from './accuracy';
+export type { AccuracySectionProps } from './accuracy';
+
 // Individual stat cards (legacy — kept for standalone use)
 export { XPLevelCard } from './cards/XPLevelCard';
 export type { XPLevelCardProps } from './cards/XPLevelCard';
