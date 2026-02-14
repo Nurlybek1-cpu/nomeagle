@@ -76,6 +76,18 @@ export const DashboardPage: React.FC = () => {
       .catch((err) => setState({ status: 'error', error: String(err) }));
   }, []);
 
+  /** Handle reset progress action from card menu */
+  const handleResetProgress = useCallback((countryId: string) => {
+    // TODO: Implement reset progress API call
+    console.log('Reset progress for country:', countryId);
+  }, []);
+
+  /** Handle remove from dashboard action from card menu */
+  const handleRemoveFromDashboard = useCallback((countryId: string) => {
+    // TODO: Implement remove from dashboard API call
+    console.log('Remove from dashboard:', countryId);
+  }, []);
+
   useEffect(() => {
     loadDashboard();
   }, [loadDashboard]);
@@ -133,6 +145,8 @@ export const DashboardPage: React.FC = () => {
                       // TODO: navigate to /country/:id
                       console.log('Navigate to country:', id);
                     }}
+                    onReset={handleResetProgress}
+                    onRemove={handleRemoveFromDashboard}
                   />
                 ))}
               </div>

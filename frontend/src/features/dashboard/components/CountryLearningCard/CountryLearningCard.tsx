@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Card, CardContent, CardFooter } from '../../../../components/ui/Card';
 import { Badge } from '../../../../components/ui/Badge';
 import { Button } from '../../../../components/ui/Button';
 import { ProgressBar } from '../../../../components/ui/Progress';
+import { Menu } from '../../../../components/ui/Menu';
 import { Icon } from '../../../../components/media/Icon';
 import type { CountryProgress, CountryStatus } from '../../types';
 import styles from './CountryLearningCard.module.css';
@@ -11,7 +12,20 @@ import styles from './CountryLearningCard.module.css';
    CountryLearningCard
    Dashboard country card — supports grid (default) and list variants.
    Uses SVG flag icons from /assets/icons/countries/ via the Icon system.
+   Includes actions menu for Reset Progress and Remove from Dashboard.
    ========================================================================== */
+
+/* ---------- Icon paths ---------- */
+const ICONS = {
+  settings: '/assets/icons/actions/settings.svg',
+  moreVertical: '/assets/icons/actions/menu_three_vertical_dot.svg',
+} as const;
+
+/* ---------- Menu items ---------- */
+const MENU_ITEMS = [
+  { id: 'reset', label: 'Reset Progress' },
+  { id: 'remove', label: 'Remove from\nDashboard', danger: true },
+] as const;
 
 /* ---------- Helpers ---------- */
 
@@ -41,6 +55,10 @@ export interface CountryLearningCardProps {
   country: CountryProgress;
   /** Called when the user clicks the CTA button */
   onAction?: (countryId: string) => void;
+  /** Called when user selects "Reset Progress" from menu */
+  onReset?: (countryId: string) => void;
+  /** Called when user selects "Remove from Dashboard" from menu */
+  onRemove?: (countryId: string) => void;
   /** Layout variant: 'grid' (default vertical card) or 'list' (compact horizontal row) */
   variant?: 'grid' | 'list';
 }
@@ -50,6 +68,8 @@ export interface CountryLearningCardProps {
 export const CountryLearningCard: React.FC<CountryLearningCardProps> = ({
   country,
   onAction,
+  onReset,
+  onRemove,
   variant = 'grid',
 }) => {
   const {
@@ -67,6 +87,18 @@ export const CountryLearningCard: React.FC<CountryLearningCardProps> = ({
 
   /** First letter of the country name, used as fallback */
   const initial = countryName.charAt(0).toUpperCase();
+
+  /** Handle menu item selection */
+  const handleMenuSelect = useCallback(
+    (id: string) => {
+      if (id === 'reset') {
+        onReset?.(countryId);
+      } else if (id === 'remove') {
+        onRemove?.(countryId);
+      }
+    },
+    [countryId, onReset, onRemove]
+  );
 
   /* ========== List variant — compact horizontal row ========== */
   if (variant === 'list') {
@@ -122,6 +154,21 @@ export const CountryLearningCard: React.FC<CountryLearningCardProps> = ({
         >
           {ctaLabel}
         </Button>
+
+        {/* Actions Menu — 3-dots, always visible */}
+        <Menu
+          trigger={
+            <button
+              className={styles.listMenuButton}
+              aria-label={`Actions for ${countryName}`}
+            >
+              <img src={ICONS.moreVertical} alt="" aria-hidden="true" />
+            </button>
+          }
+          items={[...MENU_ITEMS]}
+          onSelect={handleMenuSelect}
+          position="bottom-left"
+        />
       </div>
     );
   }
@@ -129,6 +176,23 @@ export const CountryLearningCard: React.FC<CountryLearningCardProps> = ({
   /* ========== Grid variant — vertical card (default) ========== */
   return (
     <Card hoverable className={styles.card}>
+      {/* Actions Menu — settings icon, visible on card hover */}
+      <div className={styles.gridMenuWrapper}>
+        <Menu
+          trigger={
+            <button
+              className={styles.gridMenuButton}
+              aria-label={`Actions for ${countryName}`}
+            >
+              <img src={ICONS.settings} alt="" aria-hidden="true" />
+            </button>
+          }
+          items={[...MENU_ITEMS]}
+          onSelect={handleMenuSelect}
+          position="right"
+        />
+      </div>
+
       <CardContent className={styles.body}>
         {/* ---- Header row: flag icon + name + badge ---- */}
         <div className={styles.headerRow}>

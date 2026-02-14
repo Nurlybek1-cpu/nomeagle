@@ -60,6 +60,10 @@ export type { TooltipProps } from './Tooltip';
 export { Dropdown } from './Dropdown';
 export type { DropdownProps, DropdownItem } from './Dropdown';
 
+// Menu (accessible dropdown with keyboard navigation)
+export { Menu } from './Menu';
+export type { MenuProps, MenuItem } from './Menu';
+
 // Avatar
 export { Avatar } from './Avatar';
 export type { AvatarProps } from './Avatar';

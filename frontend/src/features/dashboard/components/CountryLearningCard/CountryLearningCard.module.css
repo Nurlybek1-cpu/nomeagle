@@ -9,6 +9,65 @@
 
 .card {
   width: 100%;
+  position: relative;
+}
+
+/* ---------- Grid Menu Wrapper (positioned at very top-right corner) ---------- */
+.gridMenuWrapper {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+/* Show on card hover */
+.card:hover .gridMenuWrapper {
+  opacity: 1;
+}
+
+/* Keep visible when menu is open (has focused child) */
+.gridMenuWrapper:focus-within {
+  opacity: 1;
+}
+
+/* ---------- Grid Menu Button (settings icon) ---------- */
+.gridMenuButton {
+  width: var(--ne-4); /* 32px */
+  height: var(--ne-4); /* 32px */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ne-surface);
+  border: 1px solid var(--ne-border);
+  border-top: none; /* Merge with card top */
+  border-right: none; /* Merge with card right */
+  border-radius: 0 var(--ne-radius-md) 0 var(--ne-radius-sm); /* Top-right matches card, bottom-left rounded */
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.gridMenuButton img {
+  width: 16px;
+  height: 16px;
+  opacity: 0.6;
+  transition: opacity 0.15s ease;
+}
+
+/* Button hover state */
+.gridMenuButton:hover {
+  background-color: var(--ne-bg);
+}
+
+.gridMenuButton:hover img {
+  opacity: 0.9;
+}
+
+/* Focus state */
+.gridMenuButton:focus-visible {
+  outline: 2px solid var(--ne-primary);
+  outline-offset: -2px;
 }
 
 /* ---------- Body (inside CardContent) ---------- */
@@ -125,6 +184,7 @@
    ========================================================================== */
 
 .listCard {
+  position: relative;
   display: flex;
   align-items: center;
   gap: var(--ne-2); /* 16px */
@@ -208,6 +268,47 @@
   text-align: right;
 }
 
+/* ---------- List Menu Button (3-dots icon) ---------- */
+.listMenuButton {
+  width: var(--ne-4); /* 32px */
+  height: var(--ne-4); /* 32px */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: var(--ne-radius-sm); /* 8px */
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background-color 0.15s ease;
+}
+
+.listMenuButton img {
+  width: 16px;
+  height: 16px;
+  opacity: 0.5;
+  transition: opacity 0.15s ease;
+}
+
+/* Hover state */
+.listMenuButton:hover {
+  background-color: var(--ne-bg);
+}
+
+.listMenuButton:hover img {
+  opacity: 0.8;
+}
+
+/* Focus state */
+.listMenuButton:focus-visible {
+  outline: 2px solid var(--ne-primary);
+  outline-offset: 2px;
+}
+
+.listMenuButton:focus-visible img {
+  opacity: 0.8;
+}
+
 /* Responsive adjustments for list view */
 @media (max-width: 640px) {
   .listCard {
@@ -224,5 +325,9 @@
     flex: 100%;
     max-width: none;
     order: 10;
+  }
+
+  .listMenuButton {
+    order: 5;
   }
 }
