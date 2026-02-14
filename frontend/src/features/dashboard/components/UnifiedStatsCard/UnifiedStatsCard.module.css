@@ -81,35 +81,4 @@
   line-height: 1.4;
 }
 
-/* ---------- Time rings row ---------- */
-.ringsRow {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: var(--ne-2); /* 16px */
-  padding-top: var(--ne-1); /* 8px — small extra breathing room */
-}
-
-.ringItem {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  flex: 1;
-  min-width: 0;
-}
-
-.ringValue {
-  font-size: 0.8125rem;
-  font-weight: 700;
-  color: var(--ne-text);
-  line-height: 1;
-}
-
-.ringLabel {
-  font-size: 0.6875rem;
-  font-weight: 600;
-  color: var(--ne-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-}
+/* (Time rings moved to standalone TimeSpentSection component) */

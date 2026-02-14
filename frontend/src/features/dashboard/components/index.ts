@@ -26,6 +26,10 @@ export type { XPLevelSectionProps } from './xp';
 export { StreakSection } from './streak';
 export type { StreakSectionProps } from './streak';
 
+// Time spent section (circular progress rings)
+export { TimeSpentSection } from './time';
+export type { TimeSpentSectionProps } from './time';
+
 // Individual stat cards (legacy — kept for standalone use)
 export { XPLevelCard } from './cards/XPLevelCard';
 export type { XPLevelCardProps } from './cards/XPLevelCard';

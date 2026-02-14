@@ -1,8 +1,8 @@
 import React from 'react';
 import { Card } from '../../../../components/ui/Card';
-import { ProgressRing } from '../../../../components/ui/Progress/ProgressRing';
 import { XPLevelSection } from '../xp';
 import { StreakSection } from '../streak';
+import { TimeSpentSection } from '../time';
 import type { UserStats } from '../../types';
 import styles from './UnifiedStatsCard.module.css';
 
@@ -28,15 +28,6 @@ import styles from './UnifiedStatsCard.module.css';
    └──────────────────────────┘
    ========================================================================== */
 
-/* ---------- Helpers ---------- */
-
-const fmtMin = (m: number): string => {
-  if (m < 60) return `${m}m`;
-  const h = Math.floor(m / 60);
-  const rem = m % 60;
-  return rem > 0 ? `${h}h ${rem}m` : `${h}h`;
-};
-
 /* ---------- Shared sub-components ---------- */
 
 /** Section title row — icon + label */
@@ -59,58 +50,7 @@ const SectionDivider: React.FC = () => (
 
 /* Section 2 — Streak (delegated to standalone StreakSection component) */
 
-/* ==========================================================================
-   Section 3 — Time Spent
-   ========================================================================== */
-
-interface TimeSpentSectionProps {
-  timeTodayMinutes: number;
-  timeWeekMinutes: number;
-  timeTotalMinutes: number;
-}
-
-const DAILY_GOAL = 30;
-const WEEKLY_GOAL = 180;
-const TOTAL_CAP = 6_000;
-
-const TimeSpentSection: React.FC<TimeSpentSectionProps> = ({
-  timeTodayMinutes,
-  timeWeekMinutes,
-  timeTotalMinutes,
-}) => {
-  const rings: {
-    label: string;
-    value: number;
-    max: number;
-    color: 'primary' | 'success' | 'warning';
-    display: string;
-  }[] = [
-    { label: 'Today', value: timeTodayMinutes, max: DAILY_GOAL,  color: 'primary', display: fmtMin(timeTodayMinutes) },
-    { label: 'Week',  value: timeWeekMinutes,  max: WEEKLY_GOAL, color: 'success', display: fmtMin(timeWeekMinutes) },
-    { label: 'Total', value: timeTotalMinutes,  max: TOTAL_CAP,  color: 'warning', display: fmtMin(timeTotalMinutes) },
-  ];
-
-  return (
-    <div className={styles.section}>
-      <SectionHeader icon="⏱️" label="Time Spent" />
-      <div className={styles.ringsRow}>
-        {rings.map((r) => (
-          <div key={r.label} className={styles.ringItem}>
-            <ProgressRing
-              value={Math.min(r.value, r.max)}
-              max={r.max}
-              size="sm"
-              color={r.color}
-              showLabel={false}
-            />
-            <span className={styles.ringValue}>{r.display}</span>
-            <span className={styles.ringLabel}>{r.label}</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
+/* Section 3 — Time Spent (delegated to standalone TimeSpentSection component) */
 
 /* ==========================================================================
    Section 4 — Accuracy
@@ -161,11 +101,13 @@ export const UnifiedStatsCard: React.FC<UnifiedStatsCardProps> = ({
       />
     </div>
     <SectionDivider />
-    <TimeSpentSection
-      timeTodayMinutes={stats.timeTodayMinutes}
-      timeWeekMinutes={stats.timeWeekMinutes}
-      timeTotalMinutes={stats.timeTotalMinutes}
-    />
+    <div className={styles.section}>
+      <TimeSpentSection
+        todayMinutes={stats.timeTodayMinutes}
+        weekMinutes={stats.timeWeekMinutes}
+        totalMinutes={stats.timeTotalMinutes}
+      />
+    </div>
     <SectionDivider />
     <AccuracySection accuracy={stats.accuracy} />
   </Card>
