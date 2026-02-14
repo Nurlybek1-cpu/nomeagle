@@ -2,6 +2,7 @@ import { Navigate } from 'react-router-dom';
 import type { RouteObject } from 'react-router-dom';
 import { AppLayout } from '../../layouts/AppLayout';
 import { DashboardPage } from '../../pages/app/Dashboard';
+import { SearchCountriesPage } from '../../pages/app/SearchCountries';
 
 /**
  * Routes nested under /app — protected section of the application.
@@ -9,6 +10,7 @@ import { DashboardPage } from '../../pages/app/Dashboard';
  * Structure:
  *   /app              → redirect to /app/dashboard
  *   /app/dashboard    → DashboardPage
+ *   /app/search       → SearchCountriesPage
  *
  * All children render inside AppLayout's <Outlet />.
  * When auth is added later, wrap `element` with a <ProtectedRoute> guard:
@@ -24,6 +26,9 @@ export const appRoutes: RouteObject[] = [
 
       /* /app/dashboard */
       { path: 'dashboard', element: <DashboardPage /> },
+
+      /* /app/search — Search Countries (catalog) */
+      { path: 'search', element: <SearchCountriesPage /> },
     ],
   },
 ];

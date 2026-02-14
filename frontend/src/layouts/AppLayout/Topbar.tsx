@@ -8,20 +8,21 @@ import styles from './Topbar.module.css';
 /* ── Route → Page title map ─────────────────────────────────────────────── */
 
 const pageTitles: Record<string, string> = {
-  '/map': 'Map',
-  '/search': 'Search',
-  '/saved': 'Saved Places',
-  '/dashboard': 'Dashboard',
-  '/achievements': 'Achievements',
-  '/leaderboard': 'Leaderboard',
-  '/profile': 'Profile',
-  '/settings': 'Settings',
+  '/app': 'NomEagle',
+  '/app/map': 'Map',
+  '/app/search': 'Search Countries',
+  '/app/saved': 'Saved Places',
+  '/app/dashboard': 'Dashboard',
+  '/app/achievements': 'Achievements',
+  '/app/leaderboard': 'Leaderboard',
+  '/app/profile': 'Profile',
+  '/app/settings': 'Settings',
 };
 
 /* ── Build breadcrumbs from pathname ────────────────────────────────────── */
 
 const buildBreadcrumbs = (pathname: string): BreadcrumbItem[] => {
-  const crumbs: BreadcrumbItem[] = [{ label: 'Home', to: '/dashboard' }];
+  const crumbs: BreadcrumbItem[] = [{ label: 'Home', to: '/app/dashboard' }];
 
   const segments = pathname.split('/').filter(Boolean);
   let accumulated = '';
