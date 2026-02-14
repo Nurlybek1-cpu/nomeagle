@@ -1,9 +1,6 @@
 import React from 'react';
 import type { UserStats } from '../../types';
-import { XPLevelCard } from '../cards/XPLevelCard';
-import { TimeSpentCard } from '../cards/TimeSpentCard';
-import { AccuracyCard } from '../cards/AccuracyCard';
-import { StreakCard } from '../cards/StreakCard';
+import { UnifiedStatsCard } from '../UnifiedStatsCard';
 import styles from './StatsPanel.module.css';
 
 /* ---------- Props ---------- */
@@ -15,14 +12,11 @@ export interface StatsPanelProps {
 /* ---------- Component ---------- */
 
 /**
- * Right-column stats stack (Edclub-style).
- * Arranges the four stat cards in a vertical layout.
+ * Right-column stats container (Edclub-style).
+ * Renders a single unified stats card with all sections.
  */
 export const StatsPanel: React.FC<StatsPanelProps> = ({ stats }) => (
   <aside className={styles.panel} aria-label="Your statistics">
-    <XPLevelCard stats={stats} />
-    <StreakCard stats={stats} />
-    <TimeSpentCard stats={stats} />
-    <AccuracyCard stats={stats} />
+    <UnifiedStatsCard stats={stats} />
   </aside>
 );

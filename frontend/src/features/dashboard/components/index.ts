@@ -14,7 +14,11 @@ export type { EmptyStateCardProps } from './EmptyStateCard';
 export { StatsPanel } from './StatsPanel';
 export type { StatsPanelProps } from './StatsPanel';
 
-// Individual stat cards (if needed standalone)
+// Unified stats card (single card with all stats)
+export { UnifiedStatsCard } from './UnifiedStatsCard';
+export type { UnifiedStatsCardProps } from './UnifiedStatsCard';
+
+// Individual stat cards (legacy — kept for standalone use)
 export { XPLevelCard } from './cards/XPLevelCard';
 export type { XPLevelCardProps } from './cards/XPLevelCard';
 

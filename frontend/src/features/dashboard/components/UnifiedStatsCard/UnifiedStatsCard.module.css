@@ -1,0 +1,127 @@
+/* ==========================================================================
+   UnifiedStatsCard
+   Single vertically-stacked stats card with dividers between sections.
+   ========================================================================== */
+
+/* ---------- Card shell ---------- */
+.card {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------- Section ---------- */
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ne-1); /* 8px — tight vertical rhythm inside each section */
+  padding: var(--ne-3); /* 24px — breathing room around content */
+}
+
+/* ---------- Section header (icon + label) ---------- */
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--ne-1); /* 8px */
+}
+
+.sectionIcon {
+  font-size: 1.125rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.sectionLabel {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ne-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* ---------- Divider ---------- */
+.divider {
+  border: none;
+  border-top: 1px solid var(--ne-border);
+  margin: 0;
+}
+
+/* ---------- Big value ---------- */
+.bigValue {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--ne-text);
+  line-height: 1;
+}
+
+/* ---------- Value row (value + unit side-by-side) ---------- */
+.valueRow {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.valueUnit {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--ne-muted);
+}
+
+.valueSuffix {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--ne-muted);
+}
+
+/* ---------- Help text ---------- */
+.helpText {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--ne-muted);
+  line-height: 1.4;
+}
+
+/* ---------- XP bar ---------- */
+.xpBar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ne-1); /* 8px */
+}
+
+.xpBar .helpText {
+  text-align: right;
+  font-size: 0.75rem;
+}
+
+/* ---------- Time rings row ---------- */
+.ringsRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--ne-2); /* 16px */
+  padding-top: var(--ne-1); /* 8px — small extra breathing room */
+}
+
+.ringItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+
+.ringValue {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--ne-text);
+  line-height: 1;
+}
+
+.ringLabel {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--ne-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
