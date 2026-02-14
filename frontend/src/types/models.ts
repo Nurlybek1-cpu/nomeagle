@@ -55,8 +55,6 @@ export interface CountryProgress {
   countryId: string;
   /** Display name */
   countryName: string;
-  /** Unicode flag emoji (optional, falls back to placeholder) */
-  flagEmoji?: string;
   /** Geographic region */
   region: Region;
   /** Current learning status */

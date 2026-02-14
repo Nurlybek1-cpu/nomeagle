@@ -6,17 +6,17 @@ import styles from './Sidebar.module.css';
 /* ── Nav config ─────────────────────────────────────────────────────────── */
 
 const mainNavItems: NavItemProps[] = [
-  { label: 'Map', to: '/map', icon: '🗺️' },
-  { label: 'Search', to: '/search', icon: '🔍' },
-  { label: 'Saved', to: '/saved', icon: '⭐' },
-  { label: 'Dashboard', to: '/dashboard', icon: '📊', end: true },
-  { label: 'Achievements', to: '/achievements', icon: '🏆' },
-  { label: 'Leaderboard', to: '/leaderboard', icon: '🥇' },
-  { label: 'Profile', to: '/profile', icon: '👤' },
+  { label: 'Map',          to: '/map',          iconName: 'map' },
+  { label: 'Search',       to: '/search',       iconName: 'search' },
+  { label: 'Saved',        to: '/saved',        iconName: 'saved' },
+  { label: 'Dashboard',    to: '/dashboard',    iconName: 'dashboard', end: true },
+  { label: 'Achievements', to: '/achievements', iconName: 'achievements' },
+  { label: 'Leaderboard',  to: '/leaderboard',  iconName: 'leaderboard' },
+  { label: 'Profile',      to: '/profile',      iconName: 'profile' },
 ];
 
 const bottomNavItems: NavItemProps[] = [
-  { label: 'Settings', to: '/settings', icon: '⚙️' },
+  { label: 'Settings', to: '/settings', iconName: 'settings' },
 ];
 
 /* ── Component ──────────────────────────────────────────────────────────── */

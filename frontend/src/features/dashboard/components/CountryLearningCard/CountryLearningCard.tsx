@@ -3,8 +3,15 @@ import { Card, CardContent, CardFooter } from '../../../../components/ui/Card';
 import { Badge } from '../../../../components/ui/Badge';
 import { Button } from '../../../../components/ui/Button';
 import { ProgressBar } from '../../../../components/ui/Progress';
+import { Icon } from '../../../../components/media/Icon';
 import type { CountryProgress, CountryStatus } from '../../types';
 import styles from './CountryLearningCard.module.css';
+
+/* ==========================================================================
+   CountryLearningCard
+   Dashboard country card — left-column item.
+   Uses SVG flag icons from /assets/icons/countries/ via the Icon system.
+   ========================================================================== */
 
 /* ---------- Helpers ---------- */
 
@@ -22,7 +29,6 @@ const CTA_LABEL: Record<CountryStatus, string> = {
 
 const progressColor = (status: CountryStatus) => {
   if (status === 'completed') return 'success' as const;
-  if (status === 'in_progress') return 'primary' as const;
   return 'primary' as const;
 };
 
@@ -43,7 +49,6 @@ export const CountryLearningCard: React.FC<CountryLearningCardProps> = ({
   const {
     countryId,
     countryName,
-    flagEmoji,
     teaser,
     status,
     progressPct,
@@ -54,21 +59,28 @@ export const CountryLearningCard: React.FC<CountryLearningCardProps> = ({
   const ctaLabel = CTA_LABEL[status];
   const ctaVariant = status === 'not_started' ? 'primary' : 'secondary';
 
+  /** First letter of the country name, used as fallback */
+  const initial = countryName.charAt(0).toUpperCase();
+
   return (
     <Card hoverable className={styles.card}>
       <CardContent className={styles.body}>
-        {/* ---- Header row: flag + name + badge ---- */}
+        {/* ---- Header row: flag icon + name + badge ---- */}
         <div className={styles.headerRow}>
           <div className={styles.identity}>
-            {flagEmoji ? (
-              <span className={styles.flag} aria-hidden="true">{flagEmoji}</span>
-            ) : (
-              <img
-                className={styles.flagImg}
-                src={`/assets/images/countries/${countryId}.png`}
+            <div className={styles.flagCircle}>
+              <Icon
+                category="countries"
+                name={countryId}
+                size={32}
                 alt={`${countryName} flag`}
               />
-            )}
+              {/* Fallback initial — hidden when Icon loads;
+                  visible only when Icon falls back to transparent pixel */}
+              <span className={styles.flagFallback} aria-hidden="true">
+                {initial}
+              </span>
+            </div>
             <h3 className={styles.name}>{countryName}</h3>
           </div>
           <Badge variant={badge.variant} size="sm">{badge.label}</Badge>

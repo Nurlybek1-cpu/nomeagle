@@ -39,7 +39,6 @@ export const MOCK_COUNTRIES: CountryProgress[] = [
   {
     countryId: 'jp',
     countryName: 'Japan',
-    flagEmoji: '🇯🇵',
     region: 'Asia',
     status: 'in_progress',
     progressPct: 64,
@@ -49,7 +48,6 @@ export const MOCK_COUNTRIES: CountryProgress[] = [
   {
     countryId: 'it',
     countryName: 'Italy',
-    flagEmoji: '🇮🇹',
     region: 'Europe',
     status: 'completed',
     progressPct: 100,
@@ -59,7 +57,6 @@ export const MOCK_COUNTRIES: CountryProgress[] = [
   {
     countryId: 'br',
     countryName: 'Brazil',
-    flagEmoji: '🇧🇷',
     region: 'South America',
     status: 'not_started',
     progressPct: 0,

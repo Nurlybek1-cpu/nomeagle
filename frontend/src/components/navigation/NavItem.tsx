@@ -1,5 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import { Icon } from '../media/Icon';
+import type { IconCategory } from '../../utils/icons';
 import styles from './NavItem.module.css';
 
 /* ── Props ──────────────────────────────────────────────────────────────── */
@@ -9,8 +11,10 @@ export interface NavItemProps {
   to: string;
   /** Visible label text */
   label: string;
-  /** Leading icon (ReactNode – emoji, SVG, component, etc.) */
-  icon?: React.ReactNode;
+  /** Icon name — resolved via the Icon system (e.g. "dashboard", "map") */
+  iconName?: string;
+  /** Icon category — defaults to "navigation" */
+  iconCategory?: IconCategory;
   /** If true, NavLink only matches exact path */
   end?: boolean;
   /** Optional small badge shown on the right (e.g. "NEW") */
@@ -38,7 +42,8 @@ const buildClassName = (
 export const NavItem: React.FC<NavItemProps> = ({
   to,
   label,
-  icon,
+  iconName,
+  iconCategory = 'navigation',
   end,
   badgeText,
   disabled = false,
@@ -52,9 +57,14 @@ export const NavItem: React.FC<NavItemProps> = ({
       aria-disabled={disabled || undefined}
       aria-current={undefined} /* NavLink sets this automatically when active */
     >
-      {icon != null && (
-        <span className={styles.icon} aria-hidden="true">
-          {icon}
+      {iconName != null && (
+        <span className={styles.icon}>
+          <Icon
+            category={iconCategory}
+            name={iconName}
+            size={20}
+            alt={label}
+          />
         </span>
       )}
 
