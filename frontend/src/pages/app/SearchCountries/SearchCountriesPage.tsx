@@ -3,6 +3,7 @@ import { Card, CardContent } from '../../../components/ui/Card';
 import { SearchInput } from '../../../components/ui/SearchInput';
 import { Loading, EmptyState, ErrorState } from '../../../components/feedback';
 import { CountryCatalogCard } from '../../../features/countries/components/CountryCatalogCard';
+import { RegionFilters } from '../../../features/countries/components/RegionFilters';
 import styles from './SearchCountriesPage.module.css';
 
 /* ==========================================================================
@@ -18,6 +19,8 @@ interface Country {
   region: string;
   /** Short description / tagline */
   description: string;
+  /** Ethnic / ethnolinguistic groups (shared ancestry, culture, language) */
+  ethnicGroups?: string[];
 }
 
 type AsyncStatus = 'idle' | 'loading' | 'success' | 'error';
@@ -38,72 +41,84 @@ const MOCK_COUNTRIES: Country[] = [
     name: 'Japan',
     region: 'Asia',
     description: 'Master bowing and the art of sushi etiquette.',
+    ethnicGroups: ['East Asian'],
   },
   {
     code: 'it',
     name: 'Italy',
     region: 'Europe',
     description: 'Discover pasta traditions and expressive gestures.',
+    ethnicGroups: ['Romance'],
   },
   {
     code: 'br',
     name: 'Brazil',
     region: 'South America',
     description: 'Learn samba rhythms and carnival culture.',
+    ethnicGroups: ['Romance'],
   },
   {
     code: 'fr',
     name: 'France',
     region: 'Europe',
     description: 'Explore wine, cheese, and the art of conversation.',
+    ethnicGroups: ['Romance'],
   },
   {
     code: 'mx',
     name: 'Mexico',
     region: 'North America',
     description: 'Experience vibrant fiestas and rich culinary heritage.',
+    ethnicGroups: ['Romance'],
   },
   {
     code: 'in',
     name: 'India',
     region: 'Asia',
     description: 'Dive into diverse traditions and colorful festivals.',
+    ethnicGroups: ['Indic'],
   },
   {
     code: 'de',
     name: 'Germany',
     region: 'Europe',
     description: 'Appreciate precision, beer gardens, and Oktoberfest.',
+    ethnicGroups: ['Germanic'],
   },
   {
     code: 'kr',
     name: 'South Korea',
     region: 'Asia',
     description: 'Embrace K-pop culture and traditional Hanbok attire.',
+    ethnicGroups: ['East Asian'],
   },
   {
     code: 'au',
     name: 'Australia',
     region: 'Oceania',
     description: 'Discover outback adventures and laid-back lifestyle.',
+    ethnicGroups: ['Germanic'],
   },
   {
     code: 'eg',
     name: 'Egypt',
     region: 'Africa',
     description: 'Uncover ancient pyramids and Nile river heritage.',
+    ethnicGroups: ['Arabic'],
   },
   {
     code: 'gb',
     name: 'United Kingdom',
     region: 'Europe',
     description: 'Explore royal traditions and afternoon tea customs.',
+    ethnicGroups: ['Germanic'],
   },
   {
     code: 'th',
     name: 'Thailand',
     region: 'Asia',
     description: 'Experience temple etiquette and spicy street food.',
+    ethnicGroups: ['East Asian'],
   },
 ];
 
@@ -133,6 +148,8 @@ const MOCK_COUNTRIES: Country[] = [
 export const SearchCountriesPage: React.FC = () => {
   /* ---- State ---- */
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedRegions, setSelectedRegions] = useState<string[]>([]);
+  const [selectedEthnicGroups, setSelectedEthnicGroups] = useState<string[]>([]);
   const [state, setState] = useState<AsyncState<Country[]>>({
     status: 'success',
     data: MOCK_COUNTRIES,
@@ -151,23 +168,52 @@ export const SearchCountriesPage: React.FC = () => {
     setState({ status: 'error', error: 'Failed to load countries. Please try again.' });
   };
 
-  /* ---- Filter countries by search query (client-side for now) ---- */
+  /* ---- Filter countries by search query and region ---- */
   const filteredCountries = useMemo(() => {
     if (!state.data) return [];
-    if (!searchQuery.trim()) return state.data;
 
-    const query = searchQuery.toLowerCase();
-    return state.data.filter(
-      (country) =>
-        country.name.toLowerCase().includes(query) ||
-        country.region.toLowerCase().includes(query) ||
-        country.code.toLowerCase().includes(query)
-    );
-  }, [state.data, searchQuery]);
+    let list = state.data;
+
+    /* Region filter: if none selected => show all */
+    if (selectedRegions.length > 0) {
+      const set = new Set(selectedRegions);
+      list = list.filter((country) => set.has(country.region));
+    }
+
+    /* Ethnic / language group filter: if none selected => show all */
+    if (selectedEthnicGroups.length > 0) {
+      const set = new Set(selectedEthnicGroups);
+      list = list.filter(
+        (country) =>
+          country.ethnicGroups?.some((g) => set.has(g)) ?? false
+      );
+    }
+
+    /* Search filter */
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      list = list.filter(
+        (country) =>
+          country.name.toLowerCase().includes(query) ||
+          country.region.toLowerCase().includes(query) ||
+          country.code.toLowerCase().includes(query)
+      );
+    }
+
+    return list;
+  }, [state.data, searchQuery, selectedRegions, selectedEthnicGroups]);
 
   /* ---- Handlers ---- */
   const handleSearchChange = useCallback((value: string) => {
     setSearchQuery(value);
+  }, []);
+
+  const handleRegionChange = useCallback((next: string[]) => {
+    setSelectedRegions(next);
+  }, []);
+
+  const handleEthnicGroupChange = useCallback((next: string[]) => {
+    setSelectedEthnicGroups(next);
   }, []);
 
   const handleOverview = useCallback((code: string) => {
@@ -285,37 +331,51 @@ export const SearchCountriesPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Main content area */}
-      <main className={styles.main}>
-        {filteredCountries.length === 0 ? (
-          /* No results for search query */
-          <Card>
-            <CardContent>
-              <EmptyState
-                title="No countries found"
-                description={`No countries match "${searchQuery}". Try a different search term.`}
-              />
-            </CardContent>
-          </Card>
-        ) : (
-          /* One big card containing all country cards */
-          <Card className={styles.catalogCard}>
-            <CardContent className={styles.catalogCardContent}>
-              <div className={styles.grid}>
-                {filteredCountries.map((country) => (
-                  <CountryCatalogCard
-                    key={country.code}
-                    code={country.code}
-                    name={country.name}
-                    description={country.description}
-                    onOverview={handleOverview}
-                  />
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        )}
-      </main>
+      {/* Content: filters (left/top) + catalog */}
+      <div className={styles.contentLayout}>
+        <aside className={styles.filtersPanel} aria-label="Filter by region">
+          <RegionFilters
+            selected={selectedRegions}
+            onChange={handleRegionChange}
+            selectedEthnicGroups={selectedEthnicGroups}
+            onEthnicGroupChange={handleEthnicGroupChange}
+          />
+        </aside>
+        <main className={styles.main}>
+          {filteredCountries.length === 0 ? (
+            <Card>
+              <CardContent>
+                <EmptyState
+                  title="No countries found"
+                  description={
+                    searchQuery.trim() ||
+                    selectedRegions.length > 0 ||
+                    selectedEthnicGroups.length > 0
+                      ? 'Try a different search or filter.'
+                      : 'No countries in the catalog yet.'
+                  }
+                />
+              </CardContent>
+            </Card>
+          ) : (
+            <Card className={styles.catalogCard}>
+              <CardContent className={styles.catalogCardContent}>
+                <div className={styles.grid}>
+                  {filteredCountries.map((country) => (
+                    <CountryCatalogCard
+                      key={country.code}
+                      code={country.code}
+                      name={country.name}
+                      description={country.description}
+                      onOverview={handleOverview}
+                    />
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          )}
+        </main>
+      </div>
     </div>
   );
 };

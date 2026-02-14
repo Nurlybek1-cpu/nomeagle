@@ -49,8 +49,37 @@
   width: 100%;
 }
 
-/* ---------- Main content area ---------- */
+/* ---------- Content layout: filters + catalog ---------- */
+.contentLayout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ne-3); /* 24px */
+}
+
+/* Desktop: left panel (filters) | catalog */
+@media (min-width: 960px) {
+  .contentLayout {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: var(--ne-3);
+  }
+}
+
+.filtersPanel {
+  flex-shrink: 0;
+  min-width: 0;
+}
+
+@media (min-width: 960px) {
+  .filtersPanel {
+    width: 220px;
+  }
+}
+
+/* ---------- Main content area (catalog) ---------- */
 .main {
+  flex: 1;
+  min-width: 0;
   min-height: 400px;
 }
 
