@@ -168,39 +168,33 @@ export const SearchCountriesPage: React.FC = () => {
     setState({ status: 'error', error: 'Failed to load countries. Please try again.' });
   };
 
-  /* ---- Filter countries by search query and region ---- */
+  /* ---- Filter: Search (name only) + Regions (+ ethnic groups). Fast, single pass. ---- */
   const filteredCountries = useMemo(() => {
-    if (!state.data) return [];
+    const data = state.data;
+    if (!data || data.length === 0) return [];
 
-    let list = state.data;
+    const searchTerm = searchQuery.trim().toLowerCase();
+    const hasSearch = searchTerm.length > 0;
+    const hasRegionFilter = selectedRegions.length > 0;
+    const regionSet = hasRegionFilter ? new Set(selectedRegions) : null;
+    const hasEthnicFilter = selectedEthnicGroups.length > 0;
+    const ethnicSet = hasEthnicFilter
+      ? new Set(selectedEthnicGroups)
+      : null;
 
-    /* Region filter: if none selected => show all */
-    if (selectedRegions.length > 0) {
-      const set = new Set(selectedRegions);
-      list = list.filter((country) => set.has(country.region));
-    }
-
-    /* Ethnic / language group filter: if none selected => show all */
-    if (selectedEthnicGroups.length > 0) {
-      const set = new Set(selectedEthnicGroups);
-      list = list.filter(
-        (country) =>
-          country.ethnicGroups?.some((g) => set.has(g)) ?? false
-      );
-    }
-
-    /* Search filter */
-    if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase();
-      list = list.filter(
-        (country) =>
-          country.name.toLowerCase().includes(query) ||
-          country.region.toLowerCase().includes(query) ||
-          country.code.toLowerCase().includes(query)
-      );
-    }
-
-    return list;
+    return data.filter((country) => {
+      if (hasRegionFilter && regionSet && !regionSet.has(country.region))
+        return false;
+      if (
+        hasEthnicFilter &&
+        ethnicSet &&
+        !(country.ethnicGroups?.some((g) => ethnicSet.has(g)) ?? false)
+      )
+        return false;
+      if (hasSearch && !country.name.toLowerCase().includes(searchTerm))
+        return false;
+      return true;
+    });
   }, [state.data, searchQuery, selectedRegions, selectedEthnicGroups]);
 
   /* ---- Handlers ---- */
@@ -214,6 +208,12 @@ export const SearchCountriesPage: React.FC = () => {
 
   const handleEthnicGroupChange = useCallback((next: string[]) => {
     setSelectedEthnicGroups(next);
+  }, []);
+
+  const handleClearFilters = useCallback(() => {
+    setSearchQuery('');
+    setSelectedRegions([]);
+    setSelectedEthnicGroups([]);
   }, []);
 
   const handleOverview = useCallback((code: string) => {
@@ -347,13 +347,9 @@ export const SearchCountriesPage: React.FC = () => {
               <CardContent>
                 <EmptyState
                   title="No countries found"
-                  description={
-                    searchQuery.trim() ||
-                    selectedRegions.length > 0 ||
-                    selectedEthnicGroups.length > 0
-                      ? 'Try a different search or filter.'
-                      : 'No countries in the catalog yet.'
-                  }
+                  description="Try another search or filter."
+                  actionLabel="Clear filters"
+                  onAction={handleClearFilters}
                 />
               </CardContent>
             </Card>
