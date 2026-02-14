@@ -7,6 +7,8 @@ import styles from './StatsPanel.module.css';
 
 export interface StatsPanelProps {
   stats: UserStats;
+  /** 7 booleans (Mon → Sun) for the streak week row */
+  weekProgress?: boolean[];
 }
 
 /* ---------- Component ---------- */
@@ -15,8 +17,11 @@ export interface StatsPanelProps {
  * Right-column stats container (Edclub-style).
  * Renders a single unified stats card with all sections.
  */
-export const StatsPanel: React.FC<StatsPanelProps> = ({ stats }) => (
+export const StatsPanel: React.FC<StatsPanelProps> = ({
+  stats,
+  weekProgress,
+}) => (
   <aside className={styles.panel} aria-label="Your statistics">
-    <UnifiedStatsCard stats={stats} />
+    <UnifiedStatsCard stats={stats} weekProgress={weekProgress} />
   </aside>
 );

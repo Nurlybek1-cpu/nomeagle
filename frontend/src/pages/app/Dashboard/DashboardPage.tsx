@@ -6,7 +6,7 @@ import {
   EmptyStateCard,
   StatsPanel,
 } from '../../../features/dashboard/components';
-import { fetchMockDashboard } from '../../../features/dashboard/mock/dashboard.mock';
+import { fetchMockDashboard, MOCK_WEEK_PROGRESS } from '../../../features/dashboard/mock/dashboard.mock';
 import type { DashboardResponse, AsyncState } from '../../../features/dashboard/types';
 import styles from './DashboardPage.module.css';
 
@@ -117,7 +117,7 @@ export const DashboardPage: React.FC = () => {
 
       {/* ── Right column: stats ───────────────────────────────────── */}
       <section className={styles.right}>
-        <StatsPanel stats={user} />
+        <StatsPanel stats={user} weekProgress={MOCK_WEEK_PROGRESS} />
       </section>
     </div>
   );

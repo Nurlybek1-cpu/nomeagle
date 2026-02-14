@@ -18,6 +18,10 @@ export type { StatsPanelProps } from './StatsPanel';
 export { UnifiedStatsCard } from './UnifiedStatsCard';
 export type { UnifiedStatsCardProps } from './UnifiedStatsCard';
 
+// Streak section (Duolingo-style gamified streak)
+export { StreakSection } from './streak';
+export type { StreakSectionProps } from './streak';
+
 // Individual stat cards (legacy — kept for standalone use)
 export { XPLevelCard } from './cards/XPLevelCard';
 export type { XPLevelCardProps } from './cards/XPLevelCard';

@@ -21,6 +21,15 @@ export const MOCK_USER_STATS: UserStats = {
   timeTotalMinutes: 2_340,
 };
 
+/**
+ * Mock week progress (Mon → Sun).
+ * true = practised that day, false = not yet.
+ * Simulates: Mon–Wed done, Thu is today (not done yet), Fri–Sun upcoming.
+ */
+export const MOCK_WEEK_PROGRESS: boolean[] = [
+  true, true, true, false, false, false, false,
+];
+
 /* --------------------------------------------------------------------------
    Mock: Country Progress
    -------------------------------------------------------------------------- */

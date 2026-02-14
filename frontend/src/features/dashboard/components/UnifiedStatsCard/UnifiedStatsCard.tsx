@@ -2,6 +2,7 @@ import React from 'react';
 import { Card } from '../../../../components/ui/Card';
 import { ProgressBar } from '../../../../components/ui/Progress/ProgressBar';
 import { ProgressRing } from '../../../../components/ui/Progress/ProgressRing';
+import { StreakSection } from '../streak';
 import type { UserStats } from '../../types';
 import styles from './UnifiedStatsCard.module.css';
 
@@ -86,24 +87,7 @@ const XPLevelSection: React.FC<XPLevelSectionProps> = ({
   );
 };
 
-/* ==========================================================================
-   Section 2 — Streak
-   ========================================================================== */
-
-interface StreakSectionProps {
-  streakDays: number;
-}
-
-const StreakSection: React.FC<StreakSectionProps> = ({ streakDays }) => (
-  <div className={styles.section}>
-    <SectionHeader icon="🔥" label="Streak" />
-    <div className={styles.valueRow}>
-      <span className={styles.bigValue}>{streakDays}</span>
-      <span className={styles.valueUnit}>days</span>
-    </div>
-    <p className={styles.helpText}>Keep your streak alive!</p>
-  </div>
-);
+/* Section 2 — Streak (delegated to standalone StreakSection component) */
 
 /* ==========================================================================
    Section 3 — Time Spent
@@ -183,9 +167,14 @@ const AccuracySection: React.FC<AccuracySectionProps> = ({ accuracy }) => (
 
 export interface UnifiedStatsCardProps {
   stats: UserStats;
+  /** 7 booleans (Mon → Sun) for the streak week row */
+  weekProgress?: boolean[];
 }
 
-export const UnifiedStatsCard: React.FC<UnifiedStatsCardProps> = ({ stats }) => (
+export const UnifiedStatsCard: React.FC<UnifiedStatsCardProps> = ({
+  stats,
+  weekProgress = [false, false, false, false, false, false, false],
+}) => (
   <Card className={styles.card}>
     <XPLevelSection
       xp={stats.xp}
@@ -193,7 +182,12 @@ export const UnifiedStatsCard: React.FC<UnifiedStatsCardProps> = ({ stats }) => 
       xpToNextLevel={stats.xpToNextLevel}
     />
     <SectionDivider />
-    <StreakSection streakDays={stats.streakDays} />
+    <div className={styles.section}>
+      <StreakSection
+        streakDays={stats.streakDays}
+        weekProgress={weekProgress}
+      />
+    </div>
     <SectionDivider />
     <TimeSpentSection
       timeTodayMinutes={stats.timeTodayMinutes}
