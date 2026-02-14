@@ -18,6 +18,10 @@ export type { StatsPanelProps } from './StatsPanel';
 export { UnifiedStatsCard } from './UnifiedStatsCard';
 export type { UnifiedStatsCardProps } from './UnifiedStatsCard';
 
+// XP level section (gamified progress bar with runner)
+export { XPLevelSection } from './xp';
+export type { XPLevelSectionProps } from './xp';
+
 // Streak section (Duolingo-style gamified streak)
 export { StreakSection } from './streak';
 export type { StreakSectionProps } from './streak';

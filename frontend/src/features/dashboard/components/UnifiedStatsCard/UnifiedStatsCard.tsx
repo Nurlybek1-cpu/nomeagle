@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card } from '../../../../components/ui/Card';
-import { ProgressBar } from '../../../../components/ui/Progress/ProgressBar';
 import { ProgressRing } from '../../../../components/ui/Progress/ProgressRing';
+import { XPLevelSection } from '../xp';
 import { StreakSection } from '../streak';
 import type { UserStats } from '../../types';
 import styles from './UnifiedStatsCard.module.css';
@@ -55,37 +55,7 @@ const SectionDivider: React.FC = () => (
   <hr className={styles.divider} />
 );
 
-/* ==========================================================================
-   Section 1 — XP & Level
-   ========================================================================== */
-
-interface XPLevelSectionProps {
-  xp: number;
-  level: number;
-  xpToNextLevel: number;
-}
-
-const XPLevelSection: React.FC<XPLevelSectionProps> = ({
-  xp,
-  level,
-  xpToNextLevel,
-}) => {
-  const xpInLevel = xp % (xp + xpToNextLevel) || xp;
-  const xpMax = xpInLevel + xpToNextLevel;
-
-  return (
-    <div className={styles.section}>
-      <SectionHeader icon="⚡" label="Level & XP" />
-      <span className={styles.bigValue}>Level {level}</span>
-      <div className={styles.xpBar}>
-        <ProgressBar value={xpInLevel} max={xpMax} color="primary" size="sm" />
-        <span className={styles.helpText}>
-          {xpToNextLevel.toLocaleString()} XP to next level
-        </span>
-      </div>
-    </div>
-  );
-};
+/* Section 1 — XP & Level (delegated to standalone XPLevelSection component) */
 
 /* Section 2 — Streak (delegated to standalone StreakSection component) */
 
@@ -176,11 +146,13 @@ export const UnifiedStatsCard: React.FC<UnifiedStatsCardProps> = ({
   weekProgress = [false, false, false, false, false, false, false],
 }) => (
   <Card className={styles.card}>
-    <XPLevelSection
-      xp={stats.xp}
-      level={stats.level}
-      xpToNextLevel={stats.xpToNextLevel}
-    />
+    <div className={styles.section}>
+      <XPLevelSection
+        level={stats.level}
+        xpCurrent={stats.xp % (stats.xp + stats.xpToNextLevel) || stats.xp}
+        xpGoal={(stats.xp % (stats.xp + stats.xpToNextLevel) || stats.xp) + stats.xpToNextLevel}
+      />
+    </div>
     <SectionDivider />
     <div className={styles.section}>
       <StreakSection
