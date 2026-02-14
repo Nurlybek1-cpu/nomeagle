@@ -21,6 +21,10 @@ export interface ProgressBarProps extends React.HTMLAttributes<HTMLDivElement> {
   size?: 'sm' | 'md' | 'lg';
   /** Show percentage label inside the bar */
   showLabel?: boolean;
+  /** Trigger fill animation (useful for view mode transitions) */
+  animated?: boolean;
+  /** Unique key to re-trigger animation when changed */
+  animationKey?: string | number;
 }
 
 export const ProgressBar: React.FC<ProgressBarProps> = ({
@@ -29,6 +33,8 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
   color = 'primary',
   size = 'md',
   showLabel = false,
+  animated = false,
+  animationKey,
   className,
   ...rest
 }) => {
@@ -44,7 +50,8 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
       {...rest}
     >
       <div
-        className={cx(styles.fill, styles[`fill-${color}`])}
+        key={animationKey}
+        className={cx(styles.fill, styles[`fill-${color}`], animated && styles.fillAnimated)}
         style={{ width: `${pct}%` }}
       />
       {showLabel && (

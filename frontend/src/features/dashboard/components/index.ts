@@ -2,6 +2,10 @@
    Dashboard Feature — Component Barrel Export
    ========================================================================== */
 
+// View toggle (list/grid switch)
+export { ViewToggle } from './ViewToggle';
+export type { ViewToggleProps, ViewMode } from './ViewToggle';
+
 // Country learning card (left column)
 export { CountryLearningCard } from './CountryLearningCard';
 export type { CountryLearningCardProps } from './CountryLearningCard';

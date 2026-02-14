@@ -1,6 +1,10 @@
 /* ==========================================================================
    CountryLearningCard
-   Dashboard country card — left-column item.
+   Dashboard country card — supports grid and list variants.
+   ========================================================================== */
+
+/* ==========================================================================
+   GRID VARIANT (default) — vertical card layout
    ========================================================================== */
 
 .card {
@@ -30,7 +34,7 @@
 }
 
 /* ==========================================================================
-   Flag — circular container with SVG icon
+   Flag — circular container with SVG icon (shared by both variants)
    ========================================================================== */
 
 .flagCircle {
@@ -114,4 +118,111 @@
   color: var(--ne-text);
   min-width: var(--ne-4); /* 32px — avoids layout shift from 0% → 100% */
   text-align: right;
+}
+
+/* ==========================================================================
+   LIST VARIANT — compact horizontal row (Edclub-style)
+   ========================================================================== */
+
+.listCard {
+  display: flex;
+  align-items: center;
+  gap: var(--ne-2); /* 16px */
+  padding: var(--ne-2); /* 16px */
+  background-color: var(--ne-surface);
+  border: 1px solid var(--ne-border);
+  border-radius: var(--ne-radius-md);
+  box-shadow: var(--ne-shadow-md);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.listCard:hover {
+  box-shadow: var(--ne-shadow-lg);
+  transform: translateY(-2px);
+}
+
+.listCard:active {
+  transform: translateY(0);
+  box-shadow: var(--ne-shadow-md);
+}
+
+/* Title + Teaser container */
+.listInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0; /* allow truncation */
+  flex: 0 0 auto;
+  max-width: 200px;
+}
+
+.listName {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--ne-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.listTeaser {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--ne-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Progress section — status label + bar */
+.listProgressSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ne-1); /* 8px */
+  flex: 1;
+  min-width: 100px;
+  max-width: 240px;
+}
+
+/* Status row above progress bar */
+.listStatusRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ne-1); /* 8px */
+}
+
+/* Progress bar container */
+.listProgress {
+  width: 100%;
+}
+
+/* Percentage */
+.listPct {
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--ne-text);
+  min-width: var(--ne-4); /* 32px */
+  text-align: right;
+}
+
+/* Responsive adjustments for list view */
+@media (max-width: 640px) {
+  .listCard {
+    flex-wrap: wrap;
+    gap: var(--ne-1); /* 8px */
+  }
+
+  .listInfo {
+    flex: 1;
+    max-width: none;
+  }
+
+  .listProgressSection {
+    flex: 100%;
+    max-width: none;
+    order: 10;
+  }
 }

@@ -29,7 +29,25 @@
 .fill {
   height: 100%;
   border-radius: 9999px;
-  transition: width 0.3s ease;
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: left center;
+}
+
+/* Animated fill — triggered on view mode change */
+.fillAnimated {
+  animation: progressFillIn 1s ease-out;
+}
+
+/* Animation when progress bar appears or view changes */
+@keyframes progressFillIn {
+  0% {
+    transform: scaleX(0);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
 }
 
 .fill-primary {

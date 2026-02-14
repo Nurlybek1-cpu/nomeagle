@@ -5,10 +5,28 @@ import {
   CountryLearningCard,
   EmptyStateCard,
   StatsPanel,
+  ViewToggle,
 } from '../../../features/dashboard/components';
+import type { ViewMode } from '../../../features/dashboard/components';
 import { fetchMockDashboard, MOCK_WEEK_PROGRESS } from '../../../features/dashboard/mock/dashboard.mock';
 import type { DashboardResponse, AsyncState } from '../../../features/dashboard/types';
 import styles from './DashboardPage.module.css';
+
+/* ---------- localStorage key for view mode persistence ---------- */
+const VIEW_MODE_STORAGE_KEY = 'ne.dashboard.countriesViewMode';
+
+/** Get initial view mode from localStorage or default to 'grid' */
+const getInitialViewMode = (): ViewMode => {
+  try {
+    const stored = localStorage.getItem(VIEW_MODE_STORAGE_KEY);
+    if (stored === 'list' || stored === 'grid') {
+      return stored;
+    }
+  } catch {
+    // localStorage not available
+  }
+  return 'grid';
+};
 
 /* ==========================================================================
    Dashboard Page
@@ -36,6 +54,19 @@ export const DashboardPage: React.FC = () => {
   const [state, setState] = useState<AsyncState<DashboardResponse>>({
     status: 'loading',
   });
+
+  /* ---- View mode state (persisted to localStorage) ---- */
+  const [viewMode, setViewMode] = useState<ViewMode>(getInitialViewMode);
+
+  /** Handle view mode change and persist to localStorage */
+  const handleViewModeChange = useCallback((mode: ViewMode) => {
+    setViewMode(mode);
+    try {
+      localStorage.setItem(VIEW_MODE_STORAGE_KEY, mode);
+    } catch {
+      // localStorage not available
+    }
+  }, []);
 
   const loadDashboard = useCallback(() => {
     setState({ status: 'loading' });
@@ -86,16 +117,18 @@ export const DashboardPage: React.FC = () => {
       {/* ── Left column: country cards ────────────────────────────── */}
       <section className={styles.left}>
         <Card>
-          <CardHeader>
+          <CardHeader className={styles.cardHeader}>
             <h2 className={styles.sectionTitle}>My Learning Countries</h2>
+            <ViewToggle value={viewMode} onChange={handleViewModeChange} />
           </CardHeader>
           <CardContent>
             {activeCountries.length > 0 ? (
-              <div className={styles.countryGrid}>
+              <div className={viewMode === 'grid' ? styles.countryGrid : styles.countryList}>
                 {activeCountries.map((country) => (
                   <CountryLearningCard
                     key={country.countryId}
                     country={country}
+                    variant={viewMode}
                     onAction={(id) => {
                       // TODO: navigate to /country/:id
                       console.log('Navigate to country:', id);

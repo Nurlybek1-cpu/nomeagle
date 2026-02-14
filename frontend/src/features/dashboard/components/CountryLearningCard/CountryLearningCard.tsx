@@ -9,7 +9,7 @@ import styles from './CountryLearningCard.module.css';
 
 /* ==========================================================================
    CountryLearningCard
-   Dashboard country card — left-column item.
+   Dashboard country card — supports grid (default) and list variants.
    Uses SVG flag icons from /assets/icons/countries/ via the Icon system.
    ========================================================================== */
 
@@ -32,12 +32,17 @@ const progressColor = (status: CountryStatus) => {
   return 'primary' as const;
 };
 
+const cx = (...classes: (string | undefined | false)[]) =>
+  classes.filter(Boolean).join(' ');
+
 /* ---------- Props ---------- */
 
 export interface CountryLearningCardProps {
   country: CountryProgress;
   /** Called when the user clicks the CTA button */
   onAction?: (countryId: string) => void;
+  /** Layout variant: 'grid' (default vertical card) or 'list' (compact horizontal row) */
+  variant?: 'grid' | 'list';
 }
 
 /* ---------- Component ---------- */
@@ -45,6 +50,7 @@ export interface CountryLearningCardProps {
 export const CountryLearningCard: React.FC<CountryLearningCardProps> = ({
   country,
   onAction,
+  variant = 'grid',
 }) => {
   const {
     countryId,
@@ -62,6 +68,65 @@ export const CountryLearningCard: React.FC<CountryLearningCardProps> = ({
   /** First letter of the country name, used as fallback */
   const initial = countryName.charAt(0).toUpperCase();
 
+  /* ========== List variant — compact horizontal row ========== */
+  if (variant === 'list') {
+    return (
+      <div
+        className={styles.listCard}
+        role="article"
+        aria-label={`${countryName} learning progress`}
+      >
+        {/* Flag */}
+        <div className={styles.flagCircle}>
+          <Icon
+            category="countries"
+            name={countryId}
+            size={32}
+            alt={`${countryName} flag`}
+          />
+          <span className={styles.flagFallback} aria-hidden="true">
+            {initial}
+          </span>
+        </div>
+
+        {/* Title + Teaser */}
+        <div className={styles.listInfo}>
+          <h3 className={styles.listName}>{countryName}</h3>
+          <p className={styles.listTeaser}>{teaser}</p>
+        </div>
+
+        {/* Progress section: status + bar */}
+        <div className={styles.listProgressSection}>
+          {/* Status row above progress bar */}
+          <div className={styles.listStatusRow}>
+            <Badge variant={badge.variant} size="sm">{badge.label}</Badge>
+            <span className={styles.listPct}>{progressPct}%</span>
+          </div>
+          {/* Progress bar */}
+          <div className={styles.listProgress}>
+            <ProgressBar
+              value={progressPct}
+              color={progressColor(status)}
+              size="sm"
+              animated
+              animationKey={`${countryId}-${variant}`}
+            />
+          </div>
+        </div>
+
+        {/* CTA Button */}
+        <Button
+          variant={ctaVariant}
+          size="sm"
+          onClick={() => onAction?.(countryId)}
+        >
+          {ctaLabel}
+        </Button>
+      </div>
+    );
+  }
+
+  /* ========== Grid variant — vertical card (default) ========== */
   return (
     <Card hoverable className={styles.card}>
       <CardContent className={styles.body}>
@@ -103,6 +168,8 @@ export const CountryLearningCard: React.FC<CountryLearningCardProps> = ({
             value={progressPct}
             color={progressColor(status)}
             size="sm"
+            animated
+            animationKey={`${countryId}-${variant}`}
           />
           <span className={styles.pct}>{progressPct}%</span>
         </div>
