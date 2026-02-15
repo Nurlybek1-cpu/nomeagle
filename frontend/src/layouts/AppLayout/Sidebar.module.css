@@ -4,6 +4,7 @@
    ========================================================================== */
 
 .sidebar {
+  position: relative;
   display: flex;
   flex-direction: column;
   width: 240px;
@@ -12,6 +13,83 @@
   background-color: var(--ne-surface);
   border-right: 1px solid var(--ne-border);
   box-shadow: var(--ne-shadow-sm);
+  transition: width 0.25s ease, min-width 0.25s ease;
+}
+
+/* Collapsed: icon-only width */
+.sidebar.collapsed {
+  width: 64px;
+  min-width: 64px;
+}
+
+/* Collapsed logo: center symbol only */
+.sidebar.collapsed .logo {
+  justify-content: center;
+  padding-left: var(--ne-2);
+  padding-right: var(--ne-2);
+}
+
+/* Text logo: visible when expanded, hidden when collapsed (so only the symbol shows) */
+.sidebar.collapsed .logoTextImg {
+  opacity: 0;
+  visibility: hidden;
+  max-width: 0;
+  margin-left: 0;
+  overflow: hidden;
+  transition: opacity 0.22s ease, max-width 0.25s ease, margin 0.22s ease, visibility 0.2s ease;
+}
+
+.logoTextImg {
+  display: block;
+  max-width: 200px;
+  height: 100px;
+  width: auto;
+  object-fit: contain;
+  object-position: left center;
+  flex-shrink: 0;
+  background: transparent;
+  transition: opacity 0.22s ease, max-width 0.25s ease, margin 0.22s ease;
+}
+
+/* Toggle button on the right edge – visible only on sidebar hover */
+.toggle {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translate(50%, -50%);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--ne-border);
+  background-color: var(--ne-surface);
+  box-shadow: var(--ne-shadow-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--ne-text);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+  z-index: 2;
+}
+
+.sidebar:hover .toggle {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.toggle:hover {
+  background-color: var(--ne-bg);
+  box-shadow: var(--ne-shadow-md);
+}
+
+.toggle img {
+  display: block;
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  filter: invert(0); /* use currentColor if SVGs support it, or keep as-is */
 }
 
 /* ── Logo area ──────────────────────────────────────────────────────────── */
@@ -19,34 +97,25 @@
 .logo {
   display: flex;
   align-items: center;
-  gap: var(--ne-1);
+  gap: 0;
   padding: var(--ne-2);
   height: 56px;
   flex-shrink: 0;
   border-bottom: 1px solid var(--ne-border);
+  overflow: hidden;
 }
 
-.logoIcon {
-  width: 28px;
-  height: 28px;
-  border-radius: var(--ne-radius-sm);
-  background-color: var(--ne-primary);
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  font-size: 0.875rem;
+/* Symbol logo: always visible; transparent so PNG alpha shows */
+.logoSymbol {
+  width: 50px;
+  height: 50px;
   flex-shrink: 0;
+  object-fit: contain;
+  display: block;
+  background: transparent;
 }
 
-.logoText {
-  font-size: 1.125rem;
-  font-weight: 700;
-  color: var(--ne-text);
-  letter-spacing: -0.01em;
-}
-
+/* Text logo: transparent so PNG alpha shows */
 /* ── Scrollable nav area ────────────────────────────────────────────────── */
 
 .nav {

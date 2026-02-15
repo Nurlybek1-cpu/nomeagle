@@ -21,18 +21,22 @@ export interface NavItemProps {
   badgeText?: string;
   /** Renders the item as non-interactive */
   disabled?: boolean;
+  /** When true, sidebar is collapsed; only icon is shown */
+  collapsed?: boolean;
 }
 
 /* ── Helpers ─────────────────────────────────────────────────────────────── */
 
 const buildClassName = (
   disabled: boolean,
+  collapsed: boolean,
   { isActive }: { isActive: boolean },
 ): string =>
   [
     styles.navItem,
     isActive && !disabled ? styles.active : '',
     disabled ? styles.disabled : '',
+    collapsed ? styles.collapsed : '',
   ]
     .filter(Boolean)
     .join(' ');
@@ -47,12 +51,14 @@ export const NavItem: React.FC<NavItemProps> = ({
   end,
   badgeText,
   disabled = false,
+  collapsed = false,
 }) => {
   return (
     <NavLink
       to={to}
       end={end}
-      className={(props) => buildClassName(disabled, props)}
+      className={(props) => buildClassName(disabled, collapsed, props)}
+      title={collapsed ? label : undefined}
       tabIndex={disabled ? -1 : undefined}
       aria-disabled={disabled || undefined}
       aria-current={undefined} /* NavLink sets this automatically when active */

@@ -9,6 +9,8 @@ export interface SidebarSectionProps {
   title?: string;
   /** Array of nav item descriptors */
   items: NavItemProps[];
+  /** When true, sidebar is collapsed (icon-only); section title and labels are hidden */
+  collapsed?: boolean;
 }
 
 /* ── Component ──────────────────────────────────────────────────────────── */
@@ -16,15 +18,20 @@ export interface SidebarSectionProps {
 export const SidebarSection: React.FC<SidebarSectionProps> = ({
   title,
   items,
+  collapsed = false,
 }) => {
   if (items.length === 0) return null;
 
   return (
-    <div className={styles.section} role="group" aria-label={title}>
+    <div
+      className={`${styles.section} ${collapsed ? styles.collapsed : ''}`}
+      role="group"
+      aria-label={title}
+    >
       {title && <span className={styles.title}>{title}</span>}
 
       {items.map((item) => (
-        <NavItem key={item.to} {...item} />
+        <NavItem key={item.to} {...item} collapsed={collapsed} />
       ))}
     </div>
   );
