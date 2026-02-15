@@ -4,7 +4,9 @@ import { AppLayout } from '../../layouts/AppLayout';
 import { DashboardPage } from '../../pages/app/Dashboard';
 import { LeaderboardPage } from '../../pages/app/Leaderboard';
 import { MapExplorerPage } from '../../pages/app/MapExplorer';
+import { ProfilePage } from '../../pages/app/Profile';
 import { SearchCountriesPage } from '../../pages/app/SearchCountries';
+import { SettingsPage } from '../../pages/app/Settings';
 
 /**
  * Routes nested under /app — protected section of the application.
@@ -15,6 +17,8 @@ import { SearchCountriesPage } from '../../pages/app/SearchCountries';
  *   /app/map          → MapExplorerPage (world map)
  *   /app/search       → SearchCountriesPage
  *   /app/leaderboard  → LeaderboardPage
+ *   /app/profile      → ProfilePage
+ *   /app/settings     → SettingsPage
  *
  * All children render inside AppLayout's <Outlet />.
  * When auth is added later, wrap `element` with a <ProtectedRoute> guard:
@@ -39,6 +43,12 @@ export const appRoutes: RouteObject[] = [
 
       /* /app/leaderboard — Leaderboard */
       { path: 'leaderboard', element: <LeaderboardPage /> },
+
+      /* /app/profile — Profile */
+      { path: 'profile', element: <ProfilePage /> },
+
+      /* /app/settings — Settings (theme, language, audio, notifications, account) */
+      { path: 'settings', element: <SettingsPage /> },
     ],
   },
 ];
