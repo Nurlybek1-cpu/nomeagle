@@ -10,6 +10,7 @@ import {
 import type { ViewMode } from '../../../features/dashboard/components';
 import { fetchMockDashboard, MOCK_WEEK_PROGRESS } from '../../../features/dashboard/mock/dashboard.mock';
 import type { DashboardResponse, AsyncState } from '../../../features/dashboard/types';
+import { removeLearningCountry } from '../../../features/countries/data';
 import styles from './DashboardPage.module.css';
 
 /* ---------- localStorage key for view mode persistence ---------- */
@@ -83,10 +84,13 @@ export const DashboardPage: React.FC = () => {
   }, []);
 
   /** Handle remove from dashboard action from card menu */
-  const handleRemoveFromDashboard = useCallback((countryId: string) => {
-    // TODO: Implement remove from dashboard API call
-    console.log('Remove from dashboard:', countryId);
-  }, []);
+  const handleRemoveFromDashboard = useCallback(
+    (countryId: string) => {
+      removeLearningCountry(countryId);
+      loadDashboard();
+    },
+    [loadDashboard]
+  );
 
   useEffect(() => {
     loadDashboard();

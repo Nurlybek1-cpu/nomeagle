@@ -1,10 +1,15 @@
 /* ==========================================================================
    Dashboard Feature — Mock Data
    Provides realistic sample data so we can build & test UI without a backend.
+   "My Learning Countries" is built from localStorage (Learn button on Search).
    ========================================================================== */
 
 import type { DashboardResponse } from '../types';
 import type { UserStats, CountryProgress } from '../../../types/models';
+import {
+  getLearningCountryCodes,
+  getCountryByCode,
+} from '../../countries/data';
 
 /* --------------------------------------------------------------------------
    Mock: User Stats
@@ -75,14 +80,55 @@ export const MOCK_DASHBOARD: DashboardResponse = {
 
 /* --------------------------------------------------------------------------
    Simulated Async Fetcher
-   Use this in hooks to mimic network latency.
-   Usage:  const data = await fetchMockDashboard();
+   Builds activeCountries from localStorage (Learn button) + catalog.
+   If no learning countries yet, returns default mock (jp, it, br).
    -------------------------------------------------------------------------- */
 
 const SIMULATED_DELAY_MS = 600;
+const DEFAULT_LEARNING_CODES = ['jp', 'it', 'br'];
+
+function buildActiveCountries(): CountryProgress[] {
+  const learned = getLearningCountryCodes();
+  const allCodes =
+    learned.length > 0
+      ? [...new Set([...DEFAULT_LEARNING_CODES, ...learned])]
+      : DEFAULT_LEARNING_CODES;
+
+  return allCodes.map((code): CountryProgress => {
+    const existing = MOCK_COUNTRIES.find((c) => c.countryId === code);
+    if (existing) return structuredClone(existing);
+
+    const catalogEntry = getCountryByCode(code);
+    if (catalogEntry) {
+      return {
+        countryId: catalogEntry.code,
+        countryName: catalogEntry.name,
+        region: catalogEntry.region,
+        status: 'not_started',
+        progressPct: 0,
+        teaser: catalogEntry.description,
+      };
+    }
+
+    return {
+      countryId: code,
+      countryName: code.toUpperCase(),
+      region: 'Asia',
+      status: 'not_started',
+      progressPct: 0,
+      teaser: '',
+    };
+  });
+}
 
 export function fetchMockDashboard(): Promise<DashboardResponse> {
   return new Promise((resolve) => {
-    setTimeout(() => resolve(structuredClone(MOCK_DASHBOARD)), SIMULATED_DELAY_MS);
+    setTimeout(() => {
+      const activeCountries = buildActiveCountries();
+      resolve({
+        user: structuredClone(MOCK_USER_STATS),
+        activeCountries,
+      });
+    }, SIMULATED_DELAY_MS);
   });
 }

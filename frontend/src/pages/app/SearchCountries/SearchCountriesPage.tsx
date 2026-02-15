@@ -4,24 +4,13 @@ import { SearchInput } from '../../../components/ui/SearchInput';
 import { Loading, EmptyState, ErrorState } from '../../../components/feedback';
 import { CountryCatalogCard } from '../../../features/countries/components/CountryCatalogCard';
 import { RegionFilters } from '../../../features/countries/components/RegionFilters';
+import { COUNTRIES_CATALOG, addLearningCountry } from '../../../features/countries/data';
+import type { CatalogCountry } from '../../../features/countries/data';
 import styles from './SearchCountriesPage.module.css';
 
 /* ==========================================================================
    Types
    ========================================================================== */
-
-interface Country {
-  /** ISO 3166-1 alpha-2 code (lowercase), e.g. "jp" */
-  code: string;
-  /** Display name, e.g. "Japan" */
-  name: string;
-  /** Geographic region, e.g. "Asia" */
-  region: string;
-  /** Short description / tagline */
-  description: string;
-  /** Ethnic / ethnolinguistic groups (shared ancestry, culture, language) */
-  ethnicGroups?: string[];
-}
 
 type AsyncStatus = 'idle' | 'loading' | 'success' | 'error';
 
@@ -30,97 +19,6 @@ interface AsyncState<T> {
   data?: T;
   error?: string;
 }
-
-/* ==========================================================================
-   Mock Data (9+ countries to show the grid)
-   ========================================================================== */
-
-const MOCK_COUNTRIES: Country[] = [
-  {
-    code: 'jp',
-    name: 'Japan',
-    region: 'Asia',
-    description: 'Master bowing and the art of sushi etiquette.',
-    ethnicGroups: ['East Asian'],
-  },
-  {
-    code: 'it',
-    name: 'Italy',
-    region: 'Europe',
-    description: 'Discover pasta traditions and expressive gestures.',
-    ethnicGroups: ['Romance'],
-  },
-  {
-    code: 'br',
-    name: 'Brazil',
-    region: 'South America',
-    description: 'Learn samba rhythms and carnival culture.',
-    ethnicGroups: ['Romance'],
-  },
-  {
-    code: 'fr',
-    name: 'France',
-    region: 'Europe',
-    description: 'Explore wine, cheese, and the art of conversation.',
-    ethnicGroups: ['Romance'],
-  },
-  {
-    code: 'mx',
-    name: 'Mexico',
-    region: 'North America',
-    description: 'Experience vibrant fiestas and rich culinary heritage.',
-    ethnicGroups: ['Romance'],
-  },
-  {
-    code: 'in',
-    name: 'India',
-    region: 'Asia',
-    description: 'Dive into diverse traditions and colorful festivals.',
-    ethnicGroups: ['Indic'],
-  },
-  {
-    code: 'de',
-    name: 'Germany',
-    region: 'Europe',
-    description: 'Appreciate precision, beer gardens, and Oktoberfest.',
-    ethnicGroups: ['Germanic'],
-  },
-  {
-    code: 'kr',
-    name: 'South Korea',
-    region: 'Asia',
-    description: 'Embrace K-pop culture and traditional Hanbok attire.',
-    ethnicGroups: ['East Asian'],
-  },
-  {
-    code: 'au',
-    name: 'Australia',
-    region: 'Oceania',
-    description: 'Discover outback adventures and laid-back lifestyle.',
-    ethnicGroups: ['Germanic'],
-  },
-  {
-    code: 'eg',
-    name: 'Egypt',
-    region: 'Africa',
-    description: 'Uncover ancient pyramids and Nile river heritage.',
-    ethnicGroups: ['Arabic'],
-  },
-  {
-    code: 'gb',
-    name: 'United Kingdom',
-    region: 'Europe',
-    description: 'Explore royal traditions and afternoon tea customs.',
-    ethnicGroups: ['Germanic'],
-  },
-  {
-    code: 'th',
-    name: 'Thailand',
-    region: 'Asia',
-    description: 'Experience temple etiquette and spicy street food.',
-    ethnicGroups: ['East Asian'],
-  },
-];
 
 
 /* ==========================================================================
@@ -136,7 +34,7 @@ const MOCK_COUNTRIES: Country[] = [
    │  │ ─────── │  │ ─────── │  │ ─────── │                         │
    │  │ Details │  │ Details │  │ Details │                         │
    │  │ ─────── │  │ ─────── │  │ ─────── │                         │
-   │  │[Overview]│  │[Overview]│  │[Overview]│                         │
+   │  │ [Learn]  │  │ [Learn]  │  │ [Learn]  │                         │
    │  └─────────┘  └─────────┘  └─────────┘                         │
    │  ... more rows ...                                              │
    └─────────────────────────────────────────────────────────────────┘
@@ -150,16 +48,16 @@ export const SearchCountriesPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedRegions, setSelectedRegions] = useState<string[]>([]);
   const [selectedEthnicGroups, setSelectedEthnicGroups] = useState<string[]>([]);
-  const [state, setState] = useState<AsyncState<Country[]>>({
+  const [state, setState] = useState<AsyncState<CatalogCountry[]>>({
     status: 'success',
-    data: MOCK_COUNTRIES,
+    data: COUNTRIES_CATALOG,
   });
 
   /* ---- Simulate loading (for demo purposes, can remove) ---- */
   const simulateLoading = () => {
     setState({ status: 'loading' });
     setTimeout(() => {
-      setState({ status: 'success', data: MOCK_COUNTRIES });
+      setState({ status: 'success', data: COUNTRIES_CATALOG });
     }, 1500);
   };
 
@@ -216,9 +114,9 @@ export const SearchCountriesPage: React.FC = () => {
     setSelectedEthnicGroups([]);
   }, []);
 
-  const handleOverview = useCallback((code: string) => {
-    // TODO: Navigate to country overview page
-    console.log('Navigate to country overview:', code);
+  const handleLearn = useCallback((code: string) => {
+    addLearningCountry(code);
+    // Country now appears in Dashboard "My Learning Countries"
   }, []);
 
   const handleRetry = () => {
@@ -363,7 +261,7 @@ export const SearchCountriesPage: React.FC = () => {
                       code={country.code}
                       name={country.name}
                       description={country.description}
-                      onOverview={handleOverview}
+                      onLearn={handleLearn}
                     />
                   ))}
                 </div>

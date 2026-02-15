@@ -2,6 +2,7 @@ import { Navigate } from 'react-router-dom';
 import type { RouteObject } from 'react-router-dom';
 import { AppLayout } from '../../layouts/AppLayout';
 import { DashboardPage } from '../../pages/app/Dashboard';
+import { MapExplorerPage } from '../../pages/app/MapExplorer';
 import { SearchCountriesPage } from '../../pages/app/SearchCountries';
 
 /**
@@ -10,6 +11,7 @@ import { SearchCountriesPage } from '../../pages/app/SearchCountries';
  * Structure:
  *   /app              → redirect to /app/dashboard
  *   /app/dashboard    → DashboardPage
+ *   /app/map          → MapExplorerPage (world map)
  *   /app/search       → SearchCountriesPage
  *
  * All children render inside AppLayout's <Outlet />.
@@ -26,6 +28,9 @@ export const appRoutes: RouteObject[] = [
 
       /* /app/dashboard */
       { path: 'dashboard', element: <DashboardPage /> },
+
+      /* /app/map — Map Explorer (world map) */
+      { path: 'map', element: <MapExplorerPage /> },
 
       /* /app/search — Search Countries (catalog) */
       { path: 'search', element: <SearchCountriesPage /> },

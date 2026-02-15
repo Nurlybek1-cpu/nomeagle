@@ -1,6 +1,6 @@
 /* ==========================================================================
    CountryCatalogCard
-   Search page only: flag (full background), name, description, Overview button.
+   Search page only: flag (full background), name, description, Learn button.
    ========================================================================== */
 
 /* ---------- Card container ---------- */
@@ -93,7 +93,7 @@
 }
 
 /* ==========================================================================
-   Action Area — Overview button at end (right)
+   Action Area — Learn button at end (right)
    ========================================================================== */
 
 .actionArea {
@@ -103,7 +103,7 @@
   padding: var(--ne-2); /* 16px */
 }
 
-.overviewButton {
+.learnButton {
   display: inline-flex;
   align-items: center;
   gap: var(--ne-1); /* 8px */

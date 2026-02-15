@@ -6,7 +6,7 @@ import styles from './CountryCatalogCard.module.css';
 /* ==========================================================================
    CountryCatalogCard
    Catalog-style country card for the Search Countries page.
-   No settings menu — flag, name, description, Overview button only.
+   No settings menu — flag, name, description, Learn button only.
    
    Layout:
    ┌─────────────────────────────────┐
@@ -16,9 +16,9 @@ import styles from './CountryCatalogCard.module.css';
    │                                 │
    ├─────────────────────────────────┤
    │  Country Name (bold)             │
-   │  Short description (muted)      │
+   │  Short description (muted)     │
    ├─────────────────────────────────┤
-   │              [Overview] button  │
+   │                 [Learn] button  │
    └─────────────────────────────────┘
    ========================================================================== */
 
@@ -27,8 +27,8 @@ import styles from './CountryCatalogCard.module.css';
    Put real filenames from /public/assets/icons/actions/ here
    ========================================================================== */
 const ICON_PATHS = {
-  /** Overview icon shown inside the Overview button */
-  overview: '/assets/icons/actions/overview.svg',
+  /** Icon shown inside the Learn button (reuse overview.svg or replace with learn icon) */
+  learn: '/assets/icons/actions/overview.svg',
 } as const;
 
 /* ---------- Helpers ---------- */
@@ -53,8 +53,8 @@ export interface CountryCatalogCardProps {
   region?: string;
   /** Short description / tagline */
   description: string;
-  /** Called when the Overview button is clicked */
-  onOverview: (code: string) => void;
+  /** Called when the Learn button is clicked */
+  onLearn: (code: string) => void;
   /** Optional extra className */
   className?: string;
 }
@@ -67,7 +67,7 @@ export const CountryCatalogCard: React.FC<CountryCatalogCardProps> = ({
   code,
   name,
   description,
-  onOverview,
+  onLearn,
   className,
 }) => {
   /* ---- State for flag image fallback ---- */
@@ -83,13 +83,13 @@ export const CountryCatalogCard: React.FC<CountryCatalogCardProps> = ({
   /** First letter of country name (fallback when flag fails) */
   const initial = name.charAt(0).toUpperCase();
 
-  /** Handle Overview button click */
-  const handleOverviewClick = useCallback(
+  /** Handle Learn button click */
+  const handleLearnClick = useCallback(
     (e: React.MouseEvent) => {
       e.stopPropagation();
-      onOverview(code);
+      onLearn(code);
     },
-    [code, onOverview]
+    [code, onLearn]
   );
 
   return (
@@ -124,23 +124,23 @@ export const CountryCatalogCard: React.FC<CountryCatalogCardProps> = ({
       {/* Divider */}
       <div className={styles.divider} />
 
-      {/* Action area — Overview button at end */}
+      {/* Action area — Learn button at end */}
       <div className={styles.actionArea}>
         <Button
           variant="secondary"
           size="sm"
-          className={styles.overviewButton}
-          onClick={handleOverviewClick}
+          className={styles.learnButton}
+          onClick={handleLearnClick}
         >
           <img
-            src={ICON_PATHS.overview}
+            src={ICON_PATHS.learn}
             alt=""
             aria-hidden="true"
             width={16}
             height={16}
             className={styles.buttonIcon}
           />
-          Overview
+          Learn
         </Button>
       </div>
     </Card>
