@@ -2,6 +2,7 @@ import { Navigate } from 'react-router-dom';
 import type { RouteObject } from 'react-router-dom';
 import { AppLayout } from '../../layouts/AppLayout';
 import { DashboardPage } from '../../pages/app/Dashboard';
+import { LeaderboardPage } from '../../pages/app/Leaderboard';
 import { MapExplorerPage } from '../../pages/app/MapExplorer';
 import { SearchCountriesPage } from '../../pages/app/SearchCountries';
 
@@ -13,6 +14,7 @@ import { SearchCountriesPage } from '../../pages/app/SearchCountries';
  *   /app/dashboard    → DashboardPage
  *   /app/map          → MapExplorerPage (world map)
  *   /app/search       → SearchCountriesPage
+ *   /app/leaderboard  → LeaderboardPage
  *
  * All children render inside AppLayout's <Outlet />.
  * When auth is added later, wrap `element` with a <ProtectedRoute> guard:
@@ -34,6 +36,9 @@ export const appRoutes: RouteObject[] = [
 
       /* /app/search — Search Countries (catalog) */
       { path: 'search', element: <SearchCountriesPage /> },
+
+      /* /app/leaderboard — Leaderboard */
+      { path: 'leaderboard', element: <LeaderboardPage /> },
     ],
   },
 ];
