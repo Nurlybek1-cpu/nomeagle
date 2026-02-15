@@ -1,11 +1,13 @@
 import React from 'react';
 import { Avatar } from '../../../../components/ui';
 import type { LeaderboardEntry } from '../../types';
+import { sortAndRank } from '../../utils/ranking';
 import styles from './LeaderboardTable.module.css';
 
 /* ==========================================================================
    LeaderboardTable
    Table: Rank | User | Level | XP | Streak | Lessons %
+   Uses sortAndRank (xp desc → level → streakDays; dense ranks).
    Highlights current user row; top 3 get subtle badge styling.
    ========================================================================== */
 
@@ -38,6 +40,8 @@ export const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
     );
   }
 
+  const ranked = sortAndRank(entries);
+
   return (
     <div className={[styles.scrollWrap, className].filter(Boolean).join(' ')}>
       <table className={styles.table}>
@@ -52,8 +56,7 @@ export const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
           </tr>
         </thead>
         <tbody>
-          {entries.map((entry, index) => {
-            const rank = index + 1;
+          {ranked.map(({ entry, rank }) => {
             const isCurrentUser = entry.userId === currentUserId;
             const isTopThree = rank <= 3;
 

@@ -6,9 +6,9 @@ import {
   LeaderboardTable,
   YourRankCard,
 } from '../../../features/leaderboard/components';
-import type { LeaderboardTimeRange } from '../../../features/leaderboard/types';
+import type { LeaderboardTimeRange, LeaderboardResponse } from '../../../features/leaderboard/types';
 import { getMockLeaderboard } from '../../../features/leaderboard/mock/leaderboard.mock';
-import type { LeaderboardResponse } from '../../../features/leaderboard/types';
+import { sortAndRank } from '../../../features/leaderboard/utils/ranking';
 import styles from './LeaderboardPage.module.css';
 
 /* --------------------------------------------------------------------------
@@ -62,11 +62,11 @@ export const LeaderboardPage: React.FC = () => {
   }, [data, searchQuery]);
 
   const { currentUserRank, currentUserEntry } = useMemo(() => {
-    if (!data) return { currentUserRank: null, currentUserEntry: null };
-    const idx = filteredEntries.findIndex((e) => e.userId === data.currentUserId);
-    if (idx < 0) return { currentUserRank: null, currentUserEntry: null };
-    const entry = filteredEntries[idx] ?? null;
-    return { currentUserRank: idx + 1, currentUserEntry: entry };
+    if (!data || filteredEntries.length === 0) return { currentUserRank: null, currentUserEntry: null };
+    const ranked = sortAndRank(filteredEntries);
+    const item = ranked.find((r) => r.entry.userId === data.currentUserId);
+    if (!item) return { currentUserRank: null, currentUserEntry: null };
+    return { currentUserRank: item.rank, currentUserEntry: item.entry };
   }, [data, filteredEntries]);
 
   const handleRetry = useCallback(() => {
