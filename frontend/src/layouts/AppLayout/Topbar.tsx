@@ -9,7 +9,7 @@ const pageTitles: Record<string, string> = {
   '/app': 'NomEagle',
   '/app/map': 'Map',
   '/app/search': 'Search Countries',
-  '/app/saved': 'Saved Places',
+  '/app/stats': 'Statistics',
   '/app/dashboard': 'Dashboard',
   '/app/achievements': 'Achievements',
   '/app/leaderboard': 'Leaderboard',

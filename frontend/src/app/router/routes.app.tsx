@@ -7,6 +7,7 @@ import { MapExplorerPage } from '../../pages/app/MapExplorer';
 import { ProfilePage } from '../../pages/app/Profile';
 import { SearchCountriesPage } from '../../pages/app/SearchCountries';
 import { SettingsPage } from '../../pages/app/Settings';
+import { StatisticsPage } from '../../pages/app/Statistics';
 
 /**
  * Routes nested under /app — protected section of the application.
@@ -16,6 +17,7 @@ import { SettingsPage } from '../../pages/app/Settings';
  *   /app/dashboard    → DashboardPage
  *   /app/map          → MapExplorerPage (world map)
  *   /app/search       → SearchCountriesPage
+ *   /app/stats        → StatisticsPage
  *   /app/leaderboard  → LeaderboardPage
  *   /app/profile      → ProfilePage
  *   /app/settings     → SettingsPage
@@ -40,6 +42,9 @@ export const appRoutes: RouteObject[] = [
 
       /* /app/search — Search Countries (catalog) */
       { path: 'search', element: <SearchCountriesPage /> },
+
+      /* /app/stats — Statistics */
+      { path: 'stats', element: <StatisticsPage /> },
 
       /* /app/leaderboard — Leaderboard */
       { path: 'leaderboard', element: <LeaderboardPage /> },

@@ -14,7 +14,7 @@ export const NAVIGATION_ICONS = {
   dashboard:    '/assets/icons/navigation/dashboard_sidebar.svg',
   map:          '/assets/icons/navigation/map_sidebar.svg',
   search:       '/assets/icons/navigation/search_sidebar.svg',
-  saved:        '/assets/icons/navigation/saved_sidebar.svg',
+  statistics:   '/assets/icons/navigation/statistics_sidebar.svg',
   achievements: '/assets/icons/navigation/achievements_sidebar.svg',
   leaderboard:  '/assets/icons/navigation/leaderboard_sidebar.svg',
   profile:      '/assets/icons/navigation/profile_sidebar.svg',

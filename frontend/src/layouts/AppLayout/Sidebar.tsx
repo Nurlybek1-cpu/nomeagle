@@ -19,7 +19,7 @@ export interface SidebarProps {
 const mainNavItems: NavItemProps[] = [
   { label: 'Map',          to: '/app/map',          iconName: 'map' },
   { label: 'Search',       to: '/app/search',       iconName: 'search' },
-  { label: 'Saved',        to: '/app/saved',        iconName: 'saved' },
+  { label: 'Stats',        to: '/app/stats',        iconName: 'statistics' },
   { label: 'Dashboard',    to: '/app/dashboard',    iconName: 'dashboard', end: true },
   { label: 'Achievements', to: '/app/achievements', iconName: 'achievements' },
   { label: 'Leaderboard',  to: '/app/leaderboard',  iconName: 'leaderboard' },
