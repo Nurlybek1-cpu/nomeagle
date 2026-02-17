@@ -10,6 +10,19 @@
   margin-bottom: var(--ne-3);
 }
 
+.cardsRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--ne-3);
+  align-items: stretch;
+}
+
+@media (max-width: 1024px) {
+  .cardsRow {
+    grid-template-columns: 1fr;
+  }
+}
+
 .title {
   margin: 0 0 var(--ne-1);
   font-size: 1.25rem;
@@ -20,5 +33,5 @@
 .subtitle {
   margin: 0;
   font-size: 0.9375rem;
-  color: var(--ne-text-muted);
+  color: var(--ne-muted);
 }

@@ -1,6 +1,7 @@
 import { Navigate } from 'react-router-dom';
 import type { RouteObject } from 'react-router-dom';
 import { AppLayout } from '../../layouts/AppLayout';
+import { AchievementsPage } from '../../pages/app/Achievements';
 import { DashboardPage } from '../../pages/app/Dashboard';
 import { LeaderboardPage } from '../../pages/app/Leaderboard';
 import { MapExplorerPage } from '../../pages/app/MapExplorer';
@@ -18,6 +19,7 @@ import { StatisticsPage } from '../../pages/app/Statistics';
  *   /app/map          → MapExplorerPage (world map)
  *   /app/search       → SearchCountriesPage
  *   /app/stats        → StatisticsPage
+ *   /app/achievements → AchievementsPage
  *   /app/leaderboard  → LeaderboardPage
  *   /app/profile      → ProfilePage
  *   /app/settings     → SettingsPage
@@ -45,6 +47,9 @@ export const appRoutes: RouteObject[] = [
 
       /* /app/stats — Statistics */
       { path: 'stats', element: <StatisticsPage /> },
+
+      /* /app/achievements — Achievements / Badges */
+      { path: 'achievements', element: <AchievementsPage /> },
 
       /* /app/leaderboard — Leaderboard */
       { path: 'leaderboard', element: <LeaderboardPage /> },

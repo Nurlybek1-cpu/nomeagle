@@ -87,3 +87,7 @@ export type { DividerProps } from './Divider';
 // Stat
 export { Stat } from './Stat';
 export type { StatProps } from './Stat';
+
+// SegmentedControl
+export { SegmentedControl } from './SegmentedControl';
+export type { SegmentedControlProps, SegmentedControlOption } from './SegmentedControl';

@@ -13,6 +13,7 @@ const toPct = (value: number, max: number) =>
 const RING_SIZES = {
   sm: { diameter: 40, strokeWidth: 3 },  // 5 × 8 = 40
   md: { diameter: 48, strokeWidth: 4 },  // 6 × 8 = 48
+  lg: { diameter: 72, strokeWidth: 5 }, // 9 × 8 = 72
 } as const;
 
 type RingSize = keyof typeof RING_SIZES;
