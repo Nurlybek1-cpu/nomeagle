@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent } from '../../../components/ui/Card';
 import { SearchInput } from '../../../components/ui/SearchInput';
 import { Loading, EmptyState, ErrorState } from '../../../components/feedback';
@@ -44,6 +45,7 @@ interface AsyncState<T> {
    ========================================================================== */
 
 export const SearchCountriesPage: React.FC = () => {
+  const navigate = useNavigate();
   /* ---- State ---- */
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedRegions, setSelectedRegions] = useState<string[]>([]);
@@ -114,10 +116,13 @@ export const SearchCountriesPage: React.FC = () => {
     setSelectedEthnicGroups([]);
   }, []);
 
-  const handleLearn = useCallback((code: string) => {
-    addLearningCountry(code);
-    // Country now appears in Dashboard "My Learning Countries"
-  }, []);
+  const handleLearn = useCallback(
+    (code: string) => {
+      addLearningCountry(code);
+      navigate(`/app/countries/${code}/learn`);
+    },
+    [navigate]
+  );
 
   const handleRetry = () => {
     simulateLoading();

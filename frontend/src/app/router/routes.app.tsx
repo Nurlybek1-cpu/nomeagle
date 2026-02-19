@@ -24,6 +24,9 @@ import { StatisticsPage } from '../../pages/app/Statistics';
  *   /app/profile      → ProfilePage
  *   /app/settings     → SettingsPage
  *
+ * Note: /app/countries/:countryCode/learn is registered in router index
+ * as a standalone full-screen route (no AppLayout).
+ *
  * All children render inside AppLayout's <Outlet />.
  * When auth is added later, wrap `element` with a <ProtectedRoute> guard:
  *   element: <ProtectedRoute><AppLayout /></ProtectedRoute>

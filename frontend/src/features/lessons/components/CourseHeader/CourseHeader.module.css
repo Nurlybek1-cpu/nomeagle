@@ -1,0 +1,166 @@
+/* ==========================================================================
+   CourseHeader — Summary bar for a country course
+   Edclub style: white card, soft shadow, clean stats row.
+   8px spacing system, tokens only.
+   ========================================================================== */
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--ne-3);
+  background: var(--ne-surface);
+  border-radius: var(--ne-radius-lg);
+  box-shadow: var(--ne-shadow-md);
+  padding: var(--ne-3);
+}
+
+/* Country flag */
+.flag {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--ne-radius-sm);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+/* Title + subtitle block */
+.info {
+  flex: 1;
+  min-width: 0;
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--ne-text);
+  margin: 0;
+  line-height: 1.3;
+}
+
+.subtitle {
+  font-size: 0.8125rem;
+  color: var(--ne-muted);
+  margin: 0;
+  margin-top: 2px;
+}
+
+/* Progress bar section */
+.progressSection {
+  flex: 1;
+  min-width: 120px;
+  max-width: 280px;
+}
+
+.progressLabel {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: var(--ne-1);
+}
+
+.progressPct {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--ne-text);
+}
+
+.progressCount {
+  font-size: 0.75rem;
+  color: var(--ne-muted);
+}
+
+.progressTrack {
+  width: 100%;
+  height: 8px;
+  background: var(--ne-bg);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: var(--ne-primary);
+  border-radius: 4px;
+  transition: width 0.4s ease;
+}
+
+/* Stats chips */
+.stats {
+  display: flex;
+  align-items: center;
+  gap: var(--ne-2);
+  flex-shrink: 0;
+}
+
+.stat {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: var(--ne-1) var(--ne-2);
+  background: var(--ne-bg);
+  border-radius: var(--ne-radius-sm);
+}
+
+.statIcon {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.statIcon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.statIconStars {
+  color: var(--ne-warning);
+}
+
+.statIconPoints {
+  color: var(--ne-primary);
+}
+
+.statValue {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--ne-text);
+}
+
+.statLabel {
+  font-size: 0.75rem;
+  color: var(--ne-muted);
+}
+
+/* ---- Responsive ---- */
+
+@media (max-width: 860px) {
+  .header {
+    flex-wrap: wrap;
+  }
+
+  .progressSection {
+    max-width: none;
+    order: 5;
+    flex-basis: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .header {
+    padding: var(--ne-2);
+    gap: var(--ne-2);
+  }
+
+  .stats {
+    flex-wrap: wrap;
+    gap: var(--ne-1);
+  }
+
+  .flag {
+    width: 40px;
+    height: 40px;
+  }
+}

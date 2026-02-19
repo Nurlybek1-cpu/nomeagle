@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardHeader, CardContent } from '../../../components/ui/Card';
 import { Loading, ErrorState } from '../../../components/feedback';
 import {
@@ -52,6 +53,7 @@ const getInitialViewMode = (): ViewMode => {
    ========================================================================== */
 
 export const DashboardPage: React.FC = () => {
+  const navigate = useNavigate();
   const [state, setState] = useState<AsyncState<DashboardResponse>>({
     status: 'loading',
   });
@@ -145,10 +147,7 @@ export const DashboardPage: React.FC = () => {
                     key={country.countryId}
                     country={country}
                     variant={viewMode}
-                    onAction={(id) => {
-                      // TODO: navigate to /country/:id
-                      console.log('Navigate to country:', id);
-                    }}
+                    onAction={(id) => navigate(`/app/countries/${id}/learn`)}
                     onReset={handleResetProgress}
                     onRemove={handleRemoveFromDashboard}
                   />
