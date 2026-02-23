@@ -2,6 +2,7 @@ import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { appRoutes } from './routes.app';
 import { LearningPathPage } from '../../pages/app/LearningPath';
 import { CultureMatchRushPage } from '../../pages/app/Game/CultureMatchRushPage';
+import { StreetFoodSprintPage } from '../../pages/app/Game/StreetFoodSprintPage';
 
 /**
  * Application router.
@@ -29,6 +30,12 @@ export const router = createBrowserRouter([
   {
     path: '/app/countries/:countryCode/game',
     element: <CultureMatchRushPage />,
+  },
+
+  /* Full-screen Street Food Sprint game */
+  {
+    path: '/app/countries/:countryCode/sprint',
+    element: <StreetFoodSprintPage />,
   },
 
   /* App routes (protected section) */
