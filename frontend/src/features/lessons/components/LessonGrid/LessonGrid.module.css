@@ -1,38 +1,10 @@
 /* ==========================================================================
-   LessonGrid — responsive 5-column grid for lesson cards
+   LessonGrid — responsive grid for fixed-size 160px lesson cards
    8px spacing system, tokens only.
    ========================================================================== */
 
 .grid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  display: flex;
+  flex-wrap: wrap;
   gap: var(--ne-2);
-}
-
-/* 4 columns < 1100px */
-@media (max-width: 1100px) {
-  .grid {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
-
-/* 3 columns < 860px */
-@media (max-width: 860px) {
-  .grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-/* 2 columns < 600px */
-@media (max-width: 600px) {
-  .grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-/* 1 column < 400px */
-@media (max-width: 400px) {
-  .grid {
-    grid-template-columns: 1fr;
-  }
 }

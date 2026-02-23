@@ -11,7 +11,7 @@ export type LessonType =
   | "quiz"
   | "summary"
   | "matching"
-  | "fill_blank";
+  | "open_response";
 
 export type LessonStatus = "locked" | "available" | "completed";
 
