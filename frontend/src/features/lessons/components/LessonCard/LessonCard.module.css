@@ -14,7 +14,7 @@
   background-color: rgba(255, 255, 255, 0.7);
   box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.37);
   transition: box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1),
-              transform 0.15s ease;
+    transform 0.15s ease;
   border-radius: 3px;
   cursor: default;
   user-select: none;
@@ -81,14 +81,37 @@
 }
 
 /* Per-type sprite positions */
-.spriteVideo        { background-position: 80.08% 55.47%; }
-.spriteArticle      { background-position: 9.96% 55.58%; }
-.spriteFlashcards   { background-position: 10.06% 22.32%; }
-.spriteQuiz         { background-position: 0 55.642%; }
-.spriteScenario     { background-position: 40% 0; }
-.spriteSummary      { background-position: 20.12% 66.74%; }
-.spriteMatching     { background-position: 0 33.37%; }
-.spriteOpenResponse { background-position: 30.179% 44.42%; }
+.spriteVideo {
+  background-position: 80.08% 55.47%;
+}
+
+.spriteArticle {
+  background-position: 9.96% 55.58%;
+}
+
+.spriteFlashcards {
+  background-position: 10.06% 22.32%;
+}
+
+.spriteQuiz {
+  background-position: 0 55.642%;
+}
+
+.spriteScenario {
+  background-position: 40% 0;
+}
+
+.spriteSummary {
+  background-position: 20.12% 66.74%;
+}
+
+.spriteMatching {
+  background-position: 0 33.37%;
+}
+
+.spriteOpenResponse {
+  background-position: 30.179% 44.42%;
+}
 
 /* ---- Lock badge (top-right) ---- */
 
@@ -110,40 +133,69 @@
   height: 100%;
 }
 
-/* ---- Check overlay (bottom-left, Edclub style) ---- */
+/* ---- Green check (reading/video completion) ---- */
 
-.checkOverlay {
+.greenCheck {
+  background-image: url("/src/assets/icons/status/green-check.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 38px;
+  height: 38px;
   position: absolute;
-  bottom: 28px;
-  left: 6px;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: var(--ne-success);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #ffffff;
+  left: 61px;
+  bottom: 33px;
   z-index: 2;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
-.checkOverlay svg {
-  width: 16px;
-  height: 16px;
+/* ---- Stars sprite (practice/quiz completion) ---- */
+
+.starsSprite {
+  background-image: url("/src/assets/icons/status/stars.png");
+  background-repeat: no-repeat;
+  background-size: 143px 330px;
+  width: 143px;
+  height: 55px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 25px;
+  /* adjust based on design */
+  z-index: 2;
+}
+
+.stars5 {
+  background-position-y: 110px;
+}
+
+.stars4 {
+  background-position-y: 165px;
+}
+
+.stars3 {
+  background-position-y: 220px;
+}
+
+.stars2 {
+  background-position-y: 275px;
+}
+
+.stars1 {
+  background-position-y: 330px;
 }
 
 /* ---- Bottom strip (label) ---- */
 
 .bottom {
-  padding: 4px 0 0;
+  padding: 8px 0 0;
   text-align: center;
   flex-shrink: 0;
+  border-top: 1px solid var(--ne-border);
+  margin-top: auto;
 }
 
 .label {
-  font-size: 0.6875rem;
-  font-weight: 500;
+  font-size: 0.8125rem;
+  font-weight: 400;
   color: var(--ne-text);
   line-height: 1.3;
   margin: 0;
@@ -152,25 +204,10 @@
   text-overflow: ellipsis;
 }
 
-/* ---- Stars row (completed only) ---- */
+/* ---- Stars row (completed only, fallback) ---- */
 
 .starsRow {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 2px;
-  padding: 2px 0 0;
-  flex-shrink: 0;
-}
-
-.star {
-  width: 12px;
-  height: 12px;
-  color: var(--ne-border);
-}
-
-.starFilled {
-  color: var(--ne-warning);
+  display: none;
 }
 
 /* ---- XP tag (available/current) ---- */
