@@ -22,6 +22,30 @@
   border-color: var(--ne-primary);
 }
 
+/* Hide label until showLabel is true (e.g. after scrolling to end of article) */
+.button.labelHidden .labelContainer {
+  max-width: 0;
+}
+
+.button.finish.labelHidden {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.button.labelHidden .label {
+  opacity: 0;
+}
+
+.button.labelHidden:hover:not(:disabled) .labelContainer,
+.button.labelHidden .labelContainer {
+  max-width: 0;
+}
+
+.button.labelHidden:hover:not(:disabled) .label,
+.button.labelHidden .label {
+  opacity: 0;
+}
+
 /* Finish variant: blue pill, white text + icon, always show label, subtle shadow */
 .button.finish {
   background-color: var(--ne-primary);
@@ -47,16 +71,16 @@
   background-color: white;
 }
 
-.button.finish .labelContainer {
+.button.finish:not(.labelHidden) .labelContainer {
   max-width: 200px;
 }
 
-.button.finish .label {
+.button.finish:not(.labelHidden) .label {
   opacity: 1;
   color: white;
 }
 
-.button.finish:hover:not(:disabled) .label {
+.button.finish:hover:not(:disabled):not(.labelHidden) .label {
   opacity: 1;
   color: white;
 }

@@ -17,6 +17,8 @@ export interface SlideNavButtonProps {
     className?: string;
     /** When true, uses primary blue pill style (e.g. for "Finish" on last page). */
     isFinish?: boolean;
+    /** When false, label is hidden until true (e.g. show "next page" / "finish" only after scrolling to end). Default true. */
+    showLabel?: boolean;
 }
 
 export const SlideNavButton: React.FC<SlideNavButtonProps> = ({
@@ -26,6 +28,7 @@ export const SlideNavButton: React.FC<SlideNavButtonProps> = ({
     onClick,
     className,
     isFinish = false,
+    showLabel = true,
 }) => {
     const iconPath = ICON_PATHS[direction];
 
@@ -35,6 +38,7 @@ export const SlideNavButton: React.FC<SlideNavButtonProps> = ({
                 styles.button,
                 styles[direction],
                 isFinish && styles.finish,
+                !showLabel && styles.labelHidden,
                 className
             ].filter(Boolean).join(' ')}
             disabled={disabled}

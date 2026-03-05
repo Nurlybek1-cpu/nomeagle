@@ -1,9 +1,12 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import styles from './ArticleLessonPlayer.module.css';
 import { ArticleLesson } from '../../types';
 import { ArticlePageCard } from '../ArticlePageCard';
 import { ArticleToolsRail } from '../ArticleToolsRail';
+import { ArticleCompletionScreen } from '../ArticleCompletionScreen';
 import { SlideNavButton } from '../../../../../components/navigation/SlideNavButton';
+
+const TRANSITION_MS = 450;
 
 export interface ArticleLessonPlayerProps {
     lesson: ArticleLesson;
@@ -19,47 +22,81 @@ export const ArticleLessonPlayer: React.FC<ArticleLessonPlayerProps> = ({
     onPageChange,
 }) => {
     const [currentPageIndex, setCurrentPageIndex] = useState(initialPage);
+    const [transition, setTransition] = useState<{
+        fromIndex: number;
+        toIndex: number;
+        direction: 'next' | 'prev';
+    } | null>(null);
+    const [hasReachedEndOfCard, setHasReachedEndOfCard] = useState(false);
+    const [showCompletion, setShowCompletion] = useState(false);
+    const transitionTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const endSentinelRef = useRef<HTMLDivElement | null>(null);
+
     const totalPages = lesson.pages.length;
     const isFirstPage = currentPageIndex === 0;
     const isLastPage = currentPageIndex === totalPages - 1;
 
+    const startTransition = useCallback(
+        (fromIndex: number, toIndex: number, direction: 'next' | 'prev') => {
+            if (transitionTimeoutRef.current) clearTimeout(transitionTimeoutRef.current);
+            setTransition({ fromIndex, toIndex, direction });
+            transitionTimeoutRef.current = setTimeout(() => {
+                transitionTimeoutRef.current = null;
+                setCurrentPageIndex(toIndex);
+                setTransition(null);
+                setHasReachedEndOfCard(false);
+                onPageChange?.(toIndex);
+            }, TRANSITION_MS);
+        },
+        [onPageChange]
+    );
+
     const handleNext = useCallback(() => {
         if (isLastPage) {
-            onComplete?.();
-        } else {
+            setShowCompletion(true);
+        } else if (!transition) {
             const nextIndex = currentPageIndex + 1;
-            setCurrentPageIndex(nextIndex);
-            onPageChange?.(nextIndex);
+            startTransition(currentPageIndex, nextIndex, 'next');
         }
-    }, [currentPageIndex, isLastPage, onComplete, onPageChange]);
+    }, [currentPageIndex, isLastPage, onComplete, onPageChange, transition, startTransition]);
 
     const handlePrev = useCallback(() => {
-        if (!isFirstPage) {
+        if (!isFirstPage && !transition) {
             const prevIndex = currentPageIndex - 1;
-            setCurrentPageIndex(prevIndex);
-            onPageChange?.(prevIndex);
+            startTransition(currentPageIndex, prevIndex, 'prev');
         }
-    }, [currentPageIndex, isFirstPage, onPageChange]);
+    }, [currentPageIndex, isFirstPage, transition, startTransition]);
+
+    useEffect(() => {
+        return () => {
+            if (transitionTimeoutRef.current) clearTimeout(transitionTimeoutRef.current);
+        };
+    }, []);
+
+    // Show "next page" / "finish" label only when user has scrolled to the end of the article card
+    useEffect(() => {
+        if (transition || endSentinelRef.current === null) return;
+        const el = endSentinelRef.current;
+        const observer = new IntersectionObserver(
+            ([entry]) => setHasReachedEndOfCard(entry.isIntersecting),
+            { root: null, rootMargin: '0px', threshold: 0 }
+        );
+        observer.observe(el);
+        return () => observer.disconnect();
+    }, [currentPageIndex, transition]);
 
     // Keyboard navigation
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
-            // Ignore if user is typing in an input
             const target = e.target as HTMLElement;
             const isInput =
                 target.tagName === 'INPUT' ||
                 target.tagName === 'TEXTAREA' ||
                 target.isContentEditable;
-
             if (isInput) return;
-
-            if (e.key === 'ArrowRight') {
-                handleNext();
-            } else if (e.key === 'ArrowLeft') {
-                handlePrev();
-            }
+            if (e.key === 'ArrowRight') handleNext();
+            else if (e.key === 'ArrowLeft') handlePrev();
         };
-
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, [handleNext, handlePrev]);
@@ -68,13 +105,50 @@ export const ArticleLessonPlayer: React.FC<ArticleLessonPlayerProps> = ({
         return <div className={styles.empty}>Lesson has no pages.</div>;
     }
 
+    if (showCompletion) {
+        return (
+            <div className={[styles.playerContainer, styles.playerContainerCompletion].join(' ')}>
+                <ArticleCompletionScreen onContinue={() => onComplete?.()} />
+            </div>
+        );
+    }
+
+    const displayIndex = transition ? transition.fromIndex : currentPageIndex;
+    const isFirstPageDisplay = displayIndex === 0;
+    const isLastPageDisplay = displayIndex === totalPages - 1;
+
+    const renderSlide = (
+        pageIndex: number,
+        animationClass: string | undefined,
+        sentinelRef?: React.RefObject<HTMLDivElement | null>
+    ) => {
+        const page = lesson.pages[pageIndex];
+        return (
+            <div key={page.id} className={styles.slide}>
+                <div className={[styles.cardWrapper, animationClass].filter(Boolean).join(' ')}>
+                    <ArticlePageCard
+                        title={lesson.title}
+                        imageUrl={page.imageUrl}
+                        paragraphs={page.paragraphs}
+                        showTitle={pageIndex === 0}
+                    />
+                    <div
+                        ref={sentinelRef}
+                        className={styles.endSentinel}
+                        aria-hidden="true"
+                    />
+                </div>
+            </div>
+        );
+    };
+
     return (
         <div className={styles.playerContainer}>
             <div className={styles.navPrev}>
                 <SlideNavButton
                     direction="prev"
                     label="previous page"
-                    disabled={isFirstPage}
+                    disabled={isFirstPageDisplay}
                     onClick={handlePrev}
                 />
             </div>
@@ -82,30 +156,45 @@ export const ArticleLessonPlayer: React.FC<ArticleLessonPlayerProps> = ({
             <div className={styles.contentArea}>
                 <div className={styles.sliderWrapper}>
                     <div
-                        className={styles.sliderTrack}
-                        style={{
-                            width: `${lesson.pages.length * 100}%`,
-                            transform: `translateX(-${(100 / lesson.pages.length) * currentPageIndex}%)`,
-                            ['--slide-count']: lesson.pages.length,
-                        }}
+                        className={[styles.slideStage, !transition && styles.idle]
+                            .filter(Boolean)
+                            .join(' ')}
                     >
-                        {lesson.pages.map((page, index) => (
-                            <div key={page.id} className={styles.slide}>
-                                <ArticlePageCard
-                                    title={lesson.title}
-                                    imageUrl={page.imageUrl}
-                                    paragraphs={page.paragraphs}
-                                    showTitle={index === 0}
-                                />
-                            </div>
-                        ))}
+                        {transition ? (
+                            <>
+                                <div
+                                    className={[
+                                        styles.slideLayer,
+                                        styles.entering,
+                                        transition.direction === 'next'
+                                            ? styles.enteringNext
+                                            : styles.enteringPrev,
+                                    ].join(' ')}
+                                >
+                                    {renderSlide(transition.toIndex, undefined)}
+                                </div>
+                                <div
+                                    className={[
+                                        styles.slideLayer,
+                                        styles.exiting,
+                                        transition.direction === 'next'
+                                            ? styles.exitingNext
+                                            : styles.exitingPrev,
+                                    ].join(' ')}
+                                >
+                                    {renderSlide(transition.fromIndex, undefined)}
+                                </div>
+                            </>
+                        ) : (
+                            renderSlide(currentPageIndex, undefined, endSentinelRef)
+                        )}
                     </div>
                 </div>
             </div>
 
             <div className={styles.toolsRail}>
                 <ArticleToolsRail
-                    pageIndex={currentPageIndex}
+                    pageIndex={displayIndex}
                     totalPages={totalPages}
                 />
             </div>
@@ -113,9 +202,10 @@ export const ArticleLessonPlayer: React.FC<ArticleLessonPlayerProps> = ({
             <div className={styles.navNext}>
                 <SlideNavButton
                     direction="next"
-                    label={isLastPage ? 'finish' : 'next page'}
+                    label={isLastPageDisplay ? 'finish' : 'next page'}
                     onClick={handleNext}
-                    isFinish={isLastPage}
+                    isFinish={isLastPageDisplay}
+                    showLabel={hasReachedEndOfCard}
                 />
             </div>
         </div>
