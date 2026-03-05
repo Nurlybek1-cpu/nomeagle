@@ -4,6 +4,7 @@ import { LearningPathPage } from '../../pages/app/LearningPath';
 import { CultureMatchRushPage } from '../../pages/app/Game/CultureMatchRushPage';
 import { StreetFoodSprintPage } from '../../pages/app/Game/StreetFoodSprintPage';
 import { FestivalTimelinePage } from '../../pages/app/Game/FestivalTimelinePage';
+import { LessonPage } from '../../pages/app/Lesson';
 
 /**
  * Application router.
@@ -43,6 +44,12 @@ export const router = createBrowserRouter([
   {
     path: '/app/countries/:countryCode/festival',
     element: <FestivalTimelinePage />,
+  },
+
+  /* Full-screen Article Lesson */
+  {
+    path: '/app/lesson/:lessonId',
+    element: <LessonPage />,
   },
 
   /* App routes (protected section) */

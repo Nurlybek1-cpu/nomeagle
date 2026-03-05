@@ -114,7 +114,12 @@ export const LearningPathPage: React.FC = () => {
   /* ---- Handlers ---- */
 
   const handleLessonClick = (lessonId: string) => {
-    navigate(`/app/lesson/${lessonId}`);
+    const lesson = course.lessons[lessonId];
+    if (lesson?.type === "article") {
+      navigate(`/app/lesson/${lessonId}`);
+    } else {
+      console.log(`Navigation for ${lesson?.type} not implemented yet.`);
+    }
   };
 
   /* ---- Navigator module list ---- */

@@ -9,7 +9,6 @@ import { ProfilePage } from '../../pages/app/Profile';
 import { SearchCountriesPage } from '../../pages/app/SearchCountries';
 import { SettingsPage } from '../../pages/app/Settings';
 import { StatisticsPage } from '../../pages/app/Statistics';
-
 /**
  * Routes nested under /app — protected section of the application.
  *
@@ -62,6 +61,7 @@ export const appRoutes: RouteObject[] = [
 
       /* /app/settings — Settings (theme, language, audio, notifications, account) */
       { path: 'settings', element: <SettingsPage /> },
+
     ],
   },
 ];
