@@ -1,7 +1,22 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useMemo } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import styles from './LessonPage.module.css';
 import { ArticleLessonPlayer, mockArticleLesson } from '../../../features/lessons/article';
+import {
+    FlashcardsLessonPlayer,
+    mockFlashcardsLesson,
+} from '../../../features/lessons/flashcards';
+import type { FlashcardsLessonResult } from '../../../features/lessons/flashcards';
+import { JP_COURSE_MOCK } from '../../../features/lessons/mock';
+
+type LessonType = 'article' | 'flashcards';
+
+function resolveLessonType(lessonId: string | undefined): LessonType {
+    if (!lessonId) return 'article';
+    const lesson = JP_COURSE_MOCK.lessons[lessonId];
+    if (lesson?.type === 'flashcards') return 'flashcards';
+    return 'article';
+}
 
 const ArrowLeftIcon: React.FC = () => (
     <svg
@@ -19,10 +34,26 @@ const ArrowLeftIcon: React.FC = () => (
     </svg>
 );
 
+const LESSON_LABEL: Record<LessonType, string> = {
+    article: 'Article',
+    flashcards: 'Flashcards',
+};
+
 export const LessonPage: React.FC = () => {
+    const { lessonId } = useParams<{ lessonId: string }>();
     const navigate = useNavigate();
 
+    const lessonType = useMemo(() => resolveLessonType(lessonId), [lessonId]);
+
+    const lessonTitle = lessonType === 'flashcards'
+        ? mockFlashcardsLesson.title
+        : mockArticleLesson.title;
+
     const handleComplete = () => {
+        navigate(-1);
+    };
+
+    const handleFlashcardsComplete = (_result: FlashcardsLessonResult) => {
         navigate(-1);
     };
 
@@ -36,7 +67,7 @@ export const LessonPage: React.FC = () => {
                 <div>
                     <button onClick={handleGoBack} className={styles.backButton} type="button">
                         <ArrowLeftIcon />
-                        <span>Article: {mockArticleLesson.title}</span>
+                        <span>{LESSON_LABEL[lessonType]}: {lessonTitle}</span>
                     </button>
                 </div>
                 <div className={styles.titleSpacer} aria-hidden="true" />
@@ -46,10 +77,17 @@ export const LessonPage: React.FC = () => {
                 </div>
             </header>
             <main className={styles.content}>
-                <ArticleLessonPlayer
-                    lesson={mockArticleLesson}
-                    onComplete={handleComplete}
-                />
+                {lessonType === 'flashcards' ? (
+                    <FlashcardsLessonPlayer
+                        lesson={mockFlashcardsLesson}
+                        onComplete={handleFlashcardsComplete}
+                    />
+                ) : (
+                    <ArticleLessonPlayer
+                        lesson={mockArticleLesson}
+                        onComplete={handleComplete}
+                    />
+                )}
             </main>
         </div>
     );
