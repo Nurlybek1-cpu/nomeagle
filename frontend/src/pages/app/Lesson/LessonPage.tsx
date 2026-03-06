@@ -7,14 +7,22 @@ import {
     mockFlashcardsLesson,
 } from '../../../features/lessons/flashcards';
 import type { FlashcardsLessonResult } from '../../../features/lessons/flashcards';
+import {
+    QuizLessonPlayer,
+    quizLessonMock,
+} from '../../../features/lessons/quiz';
+import type { QuizLessonResult } from '../../../features/lessons/quiz';
 import { JP_COURSE_MOCK } from '../../../features/lessons/mock';
 
-type LessonType = 'article' | 'flashcards';
+type LessonType = 'article' | 'flashcards' | 'quiz';
 
 function resolveLessonType(lessonId: string | undefined): LessonType {
     if (!lessonId) return 'article';
+    if (lessonId.includes('quiz')) return 'quiz';
+    if (lessonId.includes('flash')) return 'flashcards';
     const lesson = JP_COURSE_MOCK.lessons[lessonId];
     if (lesson?.type === 'flashcards') return 'flashcards';
+    if (lesson?.type === 'quiz') return 'quiz';
     return 'article';
 }
 
@@ -37,6 +45,7 @@ const ArrowLeftIcon: React.FC = () => (
 const LESSON_LABEL: Record<LessonType, string> = {
     article: 'Article',
     flashcards: 'Flashcards',
+    quiz: 'Quiz',
 };
 
 export const LessonPage: React.FC = () => {
@@ -45,15 +54,21 @@ export const LessonPage: React.FC = () => {
 
     const lessonType = useMemo(() => resolveLessonType(lessonId), [lessonId]);
 
-    const lessonTitle = lessonType === 'flashcards'
-        ? mockFlashcardsLesson.title
-        : mockArticleLesson.title;
+    const lessonTitle = lessonType === 'quiz'
+        ? quizLessonMock.title
+        : lessonType === 'flashcards'
+            ? mockFlashcardsLesson.title
+            : mockArticleLesson.title;
 
     const handleComplete = () => {
         navigate(-1);
     };
 
     const handleFlashcardsComplete = (_result: FlashcardsLessonResult) => {
+        navigate(-1);
+    };
+
+    const handleQuizComplete = (_result: QuizLessonResult) => {
         navigate(-1);
     };
 
@@ -77,7 +92,12 @@ export const LessonPage: React.FC = () => {
                 </div>
             </header>
             <main className={styles.content}>
-                {lessonType === 'flashcards' ? (
+                {lessonType === 'quiz' ? (
+                    <QuizLessonPlayer
+                        lesson={quizLessonMock}
+                        onComplete={handleQuizComplete}
+                    />
+                ) : lessonType === 'flashcards' ? (
                     <FlashcardsLessonPlayer
                         lesson={mockFlashcardsLesson}
                         onComplete={handleFlashcardsComplete}
