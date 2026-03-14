@@ -115,7 +115,7 @@ export const LearningPathPage: React.FC = () => {
 
   const handleLessonClick = (lessonId: string) => {
     const lesson = course.lessons[lessonId];
-    if (lesson?.type === "article" || lesson?.type === "flashcards" || lesson?.type === "quiz") {
+    if (lesson?.type === "article" || lesson?.type === "flashcards" || lesson?.type === "quiz" || lesson?.type === "scenario") {
       navigate(`/app/lesson/${lessonId}`);
     } else {
       console.log(`Navigation for ${lesson?.type} not implemented yet.`);

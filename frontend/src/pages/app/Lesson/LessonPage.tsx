@@ -12,15 +12,22 @@ import {
     quizLessonMock,
 } from '../../../features/lessons/quiz';
 import type { QuizLessonResult } from '../../../features/lessons/quiz';
+import {
+    ScenarioLessonPlayer,
+    japanEtiquetteScenarioMock,
+} from '../../../features/lessons/scenario';
+import type { ScenarioLessonResult } from '../../../features/lessons/scenario';
 import { JP_COURSE_MOCK } from '../../../features/lessons/mock';
 
-type LessonType = 'article' | 'flashcards' | 'quiz';
+type LessonType = 'article' | 'flashcards' | 'quiz' | 'scenario';
 
 function resolveLessonType(lessonId: string | undefined): LessonType {
     if (!lessonId) return 'article';
+    if (lessonId.includes('scenario')) return 'scenario';
     if (lessonId.includes('quiz')) return 'quiz';
     if (lessonId.includes('flash')) return 'flashcards';
     const lesson = JP_COURSE_MOCK.lessons[lessonId];
+    if (lesson?.type === 'scenario') return 'scenario';
     if (lesson?.type === 'flashcards') return 'flashcards';
     if (lesson?.type === 'quiz') return 'quiz';
     return 'article';
@@ -46,6 +53,7 @@ const LESSON_LABEL: Record<LessonType, string> = {
     article: 'Article',
     flashcards: 'Flashcards',
     quiz: 'Quiz',
+    scenario: 'Scenario',
 };
 
 export const LessonPage: React.FC = () => {
@@ -54,11 +62,14 @@ export const LessonPage: React.FC = () => {
 
     const lessonType = useMemo(() => resolveLessonType(lessonId), [lessonId]);
 
-    const lessonTitle = lessonType === 'quiz'
-        ? quizLessonMock.title
-        : lessonType === 'flashcards'
-            ? mockFlashcardsLesson.title
-            : mockArticleLesson.title;
+    const lessonTitle =
+        lessonType === 'scenario'
+            ? japanEtiquetteScenarioMock.title
+            : lessonType === 'quiz'
+                ? quizLessonMock.title
+                : lessonType === 'flashcards'
+                    ? mockFlashcardsLesson.title
+                    : mockArticleLesson.title;
 
     const handleComplete = () => {
         navigate(-1);
@@ -69,6 +80,10 @@ export const LessonPage: React.FC = () => {
     };
 
     const handleQuizComplete = (_result: QuizLessonResult) => {
+        navigate(-1);
+    };
+
+    const handleScenarioComplete = (_result: ScenarioLessonResult) => {
         navigate(-1);
     };
 
@@ -92,7 +107,12 @@ export const LessonPage: React.FC = () => {
                 </div>
             </header>
             <main className={styles.content}>
-                {lessonType === 'quiz' ? (
+                {lessonType === 'scenario' ? (
+                    <ScenarioLessonPlayer
+                        lesson={japanEtiquetteScenarioMock}
+                        onComplete={handleScenarioComplete}
+                    />
+                ) : lessonType === 'quiz' ? (
                     <QuizLessonPlayer
                         lesson={quizLessonMock}
                         onComplete={handleQuizComplete}
