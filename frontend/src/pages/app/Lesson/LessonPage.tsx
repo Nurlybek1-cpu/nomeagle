@@ -22,17 +22,23 @@ import {
     mockJapanMatchingLesson,
 } from '../../../features/lessons/matching';
 import type { MatchingLessonResult } from '../../../features/lessons/matching';
+import {
+    VideoLessonPlayer,
+    mockJapanGreetingVideo,
+} from '../../../features/lessons/video';
 import { JP_COURSE_MOCK } from '../../../features/lessons/mock';
 
-type LessonType = 'article' | 'flashcards' | 'quiz' | 'scenario' | 'matching';
+type LessonType = 'article' | 'video' | 'flashcards' | 'quiz' | 'scenario' | 'matching';
 
 function resolveLessonType(lessonId: string | undefined): LessonType {
     if (!lessonId) return 'article';
+    if (lessonId.includes('video')) return 'video';
     if (lessonId.includes('matching')) return 'matching';
     if (lessonId.includes('scenario')) return 'scenario';
     if (lessonId.includes('quiz')) return 'quiz';
     if (lessonId.includes('flash')) return 'flashcards';
     const lesson = JP_COURSE_MOCK.lessons[lessonId];
+    if (lesson?.type === 'video') return 'video';
     if (lesson?.type === 'matching') return 'matching';
     if (lesson?.type === 'scenario') return 'scenario';
     if (lesson?.type === 'flashcards') return 'flashcards';
@@ -58,6 +64,7 @@ const ArrowLeftIcon: React.FC = () => (
 
 const LESSON_LABEL: Record<LessonType, string> = {
     article: 'Article',
+    video: 'Video',
     flashcards: 'Flashcards',
     quiz: 'Quiz',
     scenario: 'Scenario',
@@ -71,15 +78,17 @@ export const LessonPage: React.FC = () => {
     const lessonType = useMemo(() => resolveLessonType(lessonId), [lessonId]);
 
     const lessonTitle =
-        lessonType === 'matching'
-            ? mockJapanMatchingLesson.title
-            : lessonType === 'scenario'
-                ? japanEtiquetteScenarioMock.title
-                : lessonType === 'quiz'
-                    ? quizLessonMock.title
-                    : lessonType === 'flashcards'
-                        ? mockFlashcardsLesson.title
-                        : mockArticleLesson.title;
+        lessonType === 'video'
+            ? mockJapanGreetingVideo.title
+            : lessonType === 'matching'
+                ? mockJapanMatchingLesson.title
+                : lessonType === 'scenario'
+                    ? japanEtiquetteScenarioMock.title
+                    : lessonType === 'quiz'
+                        ? quizLessonMock.title
+                        : lessonType === 'flashcards'
+                            ? mockFlashcardsLesson.title
+                            : mockArticleLesson.title;
 
     const handleComplete = () => {
         navigate(-1);
@@ -121,7 +130,12 @@ export const LessonPage: React.FC = () => {
                 </div>
             </header>
             <main className={styles.content}>
-                {lessonType === 'matching' ? (
+                {lessonType === 'video' ? (
+                    <VideoLessonPlayer
+                        lesson={mockJapanGreetingVideo}
+                        onComplete={handleComplete}
+                    />
+                ) : lessonType === 'matching' ? (
                     <MatchingLessonPlayer
                         lesson={mockJapanMatchingLesson}
                         onComplete={handleMatchingComplete}
