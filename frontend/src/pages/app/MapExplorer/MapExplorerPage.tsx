@@ -62,12 +62,17 @@ function CountryDetailsPanel({
         </ul>
       </div>
 
-      <p className={styles.reason}>
-        <strong>Why learn?</strong> {details.reasonToLearn}
-      </p>
-      <p className={styles.funFact}>
-        <strong>Fun fact:</strong> {details.funFact}
-      </p>
+      <div className={styles.infoBox}>
+        <p className={styles.reason}>
+          <strong>Why learn?</strong> {details.reasonToLearn}
+        </p>
+      </div>
+
+      <div className={`${styles.infoBox} ${styles.funFactBox}`}>
+        <p className={styles.funFact}>
+          <strong>Fun fact:</strong> {details.funFact}
+        </p>
+      </div>
 
       <div className={styles.progressSection}>
         <div className={styles.progressHeader}>
@@ -98,15 +103,17 @@ function CountryDetailsPanel({
         </span>
       </div>
 
-      <Button
-        variant="primary"
-        size="md"
-        onClick={onEnter}
-        className={styles.enterButton}
-      >
-        <img src={ENTER_ICON} alt="" className={styles.enterIcon} aria-hidden />
-        Enter country
-      </Button>
+      <div className={styles.actionRow}>
+        <Button
+          variant="primary"
+          size="md"
+          onClick={onEnter}
+          className={styles.enterButton}
+        >
+          <img src={ENTER_ICON} alt="" className={styles.enterIcon} aria-hidden />
+          Enter country
+        </Button>
+      </div>
     </>
   );
 }

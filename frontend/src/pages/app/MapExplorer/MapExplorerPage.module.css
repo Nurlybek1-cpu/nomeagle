@@ -80,12 +80,15 @@
   min-height: 560px;
   margin: 0 var(--ne-3) 0 0;
   transform: translateX(100%);
-  animation: panelSlideIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  animation: panelSlideIn 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
   display: flex;
   flex-direction: column;
   overflow: hidden;
   z-index: 10;
-  box-shadow: var(--ne-shadow-lg);
+  background-color: var(--ne-surface);
+  border: 1px solid var(--ne-border);
+  box-shadow: -12px 0 40px rgba(0, 0, 0, 0.08);
+  border-radius: var(--ne-radius-md);
 }
 
 @keyframes panelSlideIn {
@@ -102,7 +105,8 @@
 }
 
 .panelHeader {
-  padding: var(--ne-2) var(--ne-3);
+  padding: var(--ne-3) var(--ne-3) var(--ne-2) var(--ne-3);
+  background-color: var(--ne-surface);
   border-bottom: 1px solid var(--ne-border);
   flex-shrink: 0;
 }
@@ -156,13 +160,16 @@
 
 .metaText {
   min-width: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .countryName {
-  margin: 0 0 var(--ne-1);
+  margin: 0 0 calc(var(--ne-1) / 2);
   font-size: 1.25rem;
   font-weight: 700;
   color: var(--ne-text);
+  line-height: 1.2;
 }
 
 .capital,
@@ -179,6 +186,9 @@
   font-size: 0.9375rem;
   color: var(--ne-text);
   line-height: 1.5;
+  padding: var(--ne-2) 0;
+  border-top: 1px solid var(--ne-border);
+  border-bottom: 1px solid var(--ne-border);
 }
 
 .section {
@@ -194,14 +204,30 @@
 
 .highlights {
   margin: 0;
-  padding-left: var(--ne-2);
+  padding-left: var(--ne-3);
   font-size: 0.875rem;
-  color: var(--ne-muted);
+  color: var(--ne-text);
   line-height: 1.5;
 }
 
 .highlights li {
-  margin-bottom: 2px;
+  margin-bottom: 4px;
+  padding-left: 4px;
+}
+.highlights li::marker {
+  color: var(--ne-primary);
+}
+
+.infoBox {
+  background-color: var(--ne-bg);
+  border-radius: var(--ne-radius-sm);
+  padding: var(--ne-2);
+  border: 1px solid var(--ne-border);
+}
+
+.funFactBox {
+  background-color: #f0fdf4;
+  border-color: #bbf7d0;
 }
 
 .reason,
@@ -256,9 +282,14 @@
 .enterButton {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: var(--ne-1);
-  margin-top: var(--ne-2);
-  align-self: flex-start;
+  width: 100%;
+}
+
+.actionRow {
+  margin-top: auto;
+  padding-top: var(--ne-3);
 }
 
 .enterIcon {

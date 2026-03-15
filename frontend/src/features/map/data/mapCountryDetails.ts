@@ -18,6 +18,8 @@ export interface MapCountryDetails {
   heroImageUrl: string;
   progressPct: number;
   masteryStars: number;
+  capitalLat: number;
+  capitalLng: number;
 }
 
 /** Rounded population for display (e.g. 127000000 → "127M") */
@@ -39,6 +41,8 @@ const MAP_DETAILS: Record<string, Omit<MapCountryDetails, 'code' | 'name' | 'reg
     heroImageUrl: '/assets/icons/countries/jp.svg',
     progressPct: 0,
     masteryStars: 0,
+    capitalLat: 35.6762,
+    capitalLng: 139.6503,
   },
   it: {
     capital: 'Rome',
@@ -49,6 +53,8 @@ const MAP_DETAILS: Record<string, Omit<MapCountryDetails, 'code' | 'name' | 'reg
     heroImageUrl: '/assets/icons/countries/it.svg',
     progressPct: 0,
     masteryStars: 0,
+    capitalLat: 41.9028,
+    capitalLng: 12.4964,
   },
   br: {
     capital: 'Brasília',
@@ -59,6 +65,8 @@ const MAP_DETAILS: Record<string, Omit<MapCountryDetails, 'code' | 'name' | 'reg
     heroImageUrl: '/assets/icons/countries/br.svg',
     progressPct: 0,
     masteryStars: 0,
+    capitalLat: -15.8267,
+    capitalLng: -47.9218,
   },
   fr: {
     capital: 'Paris',
@@ -69,6 +77,8 @@ const MAP_DETAILS: Record<string, Omit<MapCountryDetails, 'code' | 'name' | 'reg
     heroImageUrl: '/assets/icons/countries/fr.svg',
     progressPct: 0,
     masteryStars: 0,
+    capitalLat: 48.8566,
+    capitalLng: 2.3522,
   },
   mx: {
     capital: 'Mexico City',
@@ -79,6 +89,8 @@ const MAP_DETAILS: Record<string, Omit<MapCountryDetails, 'code' | 'name' | 'reg
     heroImageUrl: '/assets/icons/countries/mx.svg',
     progressPct: 0,
     masteryStars: 0,
+    capitalLat: 19.4326,
+    capitalLng: -99.1332,
   },
   in: {
     capital: 'New Delhi',
@@ -89,6 +101,8 @@ const MAP_DETAILS: Record<string, Omit<MapCountryDetails, 'code' | 'name' | 'reg
     heroImageUrl: '/assets/icons/countries/in.svg',
     progressPct: 0,
     masteryStars: 0,
+    capitalLat: 28.6139,
+    capitalLng: 77.2090,
   },
   de: {
     capital: 'Berlin',
@@ -99,6 +113,8 @@ const MAP_DETAILS: Record<string, Omit<MapCountryDetails, 'code' | 'name' | 'reg
     heroImageUrl: '/assets/icons/countries/de.svg',
     progressPct: 0,
     masteryStars: 0,
+    capitalLat: 52.5200,
+    capitalLng: 13.4050,
   },
   kr: {
     capital: 'Seoul',
@@ -109,6 +125,8 @@ const MAP_DETAILS: Record<string, Omit<MapCountryDetails, 'code' | 'name' | 'reg
     heroImageUrl: '/assets/icons/countries/kr.svg',
     progressPct: 0,
     masteryStars: 0,
+    capitalLat: 37.5665,
+    capitalLng: 126.9780,
   },
   au: {
     capital: 'Canberra',
@@ -119,6 +137,8 @@ const MAP_DETAILS: Record<string, Omit<MapCountryDetails, 'code' | 'name' | 'reg
     heroImageUrl: '/assets/icons/countries/au.svg',
     progressPct: 0,
     masteryStars: 0,
+    capitalLat: -35.2809,
+    capitalLng: 149.1300,
   },
   eg: {
     capital: 'Cairo',
@@ -129,6 +149,8 @@ const MAP_DETAILS: Record<string, Omit<MapCountryDetails, 'code' | 'name' | 'reg
     heroImageUrl: '/assets/icons/countries/eg.svg',
     progressPct: 0,
     masteryStars: 0,
+    capitalLat: 30.0444,
+    capitalLng: 31.2357,
   },
   gb: {
     capital: 'London',
@@ -139,6 +161,8 @@ const MAP_DETAILS: Record<string, Omit<MapCountryDetails, 'code' | 'name' | 'reg
     heroImageUrl: '/assets/icons/countries/gb.svg',
     progressPct: 0,
     masteryStars: 0,
+    capitalLat: 51.5074,
+    capitalLng: -0.1278,
   },
   th: {
     capital: 'Bangkok',
@@ -149,6 +173,32 @@ const MAP_DETAILS: Record<string, Omit<MapCountryDetails, 'code' | 'name' | 'reg
     heroImageUrl: '/assets/icons/countries/th.svg',
     progressPct: 0,
     masteryStars: 0,
+    capitalLat: 13.7563,
+    capitalLng: 100.5018,
+  },
+  ru: {
+    capital: 'Moscow',
+    population: 143_400_000,
+    culturalHighlights: ['Ballet & theatre', 'Literature (Tolstoy, Dostoevsky)', 'Space exploration heritage'],
+    reasonToLearn: 'Understand the world\'s largest country and its rich literary history.',
+    funFact: 'Russia spans 11 time zones, more than any other country.',
+    heroImageUrl: '/assets/icons/countries/ru.svg',
+    progressPct: 0,
+    masteryStars: 0,
+    capitalLat: 55.7558,
+    capitalLng: 37.6173,
+  },
+  kz: {
+    capital: 'Astana',
+    population: 19_800_000,
+    culturalHighlights: ['Nomadic traditions', 'Nauryz (Spring Festival)', 'Equestrian sports'],
+    reasonToLearn: 'Explore the heart of Central Asia and its deep nomadic heritage.',
+    funFact: 'Kazakhstan is the world\'s largest landlocked country.',
+    heroImageUrl: '/assets/icons/countries/kz.svg',
+    progressPct: 0,
+    masteryStars: 0,
+    capitalLat: 51.1694,
+    capitalLng: 71.4491,
   },
 };
 
@@ -161,6 +211,8 @@ const DEFAULT_DETAILS: Omit<MapCountryDetails, 'code' | 'name' | 'region' | 'hoo
   heroImageUrl: '',
   progressPct: 0,
   masteryStars: 0,
+  capitalLat: 0,
+  capitalLng: 0,
 };
 
 /**
