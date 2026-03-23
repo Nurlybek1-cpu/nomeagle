@@ -23,15 +23,27 @@ import {
 } from '../../../features/lessons/matching';
 import type { MatchingLessonResult } from '../../../features/lessons/matching';
 import {
+    SummaryLessonPlayer,
+    japanDiningSummaryMock,
+} from '../../../features/lessons/summary';
+import {
     VideoLessonPlayer,
     mockJapanGreetingVideo,
 } from '../../../features/lessons/video';
 import { JP_COURSE_MOCK } from '../../../features/lessons/mock';
 
-type LessonType = 'article' | 'video' | 'flashcards' | 'quiz' | 'scenario' | 'matching';
+type LessonType =
+    | 'article'
+    | 'video'
+    | 'flashcards'
+    | 'quiz'
+    | 'scenario'
+    | 'matching'
+    | 'summary';
 
 function resolveLessonType(lessonId: string | undefined): LessonType {
     if (!lessonId) return 'article';
+    if (lessonId.includes('summary')) return 'summary';
     if (lessonId.includes('video')) return 'video';
     if (lessonId.includes('matching')) return 'matching';
     if (lessonId.includes('scenario')) return 'scenario';
@@ -43,6 +55,7 @@ function resolveLessonType(lessonId: string | undefined): LessonType {
     if (lesson?.type === 'scenario') return 'scenario';
     if (lesson?.type === 'flashcards') return 'flashcards';
     if (lesson?.type === 'quiz') return 'quiz';
+    if (lesson?.type === 'summary') return 'summary';
     return 'article';
 }
 
@@ -69,6 +82,7 @@ const LESSON_LABEL: Record<LessonType, string> = {
     quiz: 'Quiz',
     scenario: 'Scenario',
     matching: 'Matching',
+    summary: 'Summary',
 };
 
 export const LessonPage: React.FC = () => {
@@ -88,6 +102,8 @@ export const LessonPage: React.FC = () => {
                         ? quizLessonMock.title
                         : lessonType === 'flashcards'
                             ? mockFlashcardsLesson.title
+                            : lessonType === 'summary'
+                                ? japanDiningSummaryMock.title
                             : mockArticleLesson.title;
 
     const handleComplete = () => {
@@ -154,6 +170,11 @@ export const LessonPage: React.FC = () => {
                     <FlashcardsLessonPlayer
                         lesson={mockFlashcardsLesson}
                         onComplete={handleFlashcardsComplete}
+                    />
+                ) : lessonType === 'summary' ? (
+                    <SummaryLessonPlayer
+                        lesson={japanDiningSummaryMock}
+                        onComplete={handleComplete}
                     />
                 ) : (
                     <ArticleLessonPlayer

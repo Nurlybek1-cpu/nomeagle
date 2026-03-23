@@ -30,7 +30,7 @@ export const ArticleLessonPlayer: React.FC<ArticleLessonPlayerProps> = ({
     const [hasReachedEndOfCard, setHasReachedEndOfCard] = useState(false);
     const [showCompletion, setShowCompletion] = useState(false);
     const transitionTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-    const endSentinelRef = useRef<HTMLDivElement | null>(null);
+    const endSentinelRef = useRef<HTMLDivElement>(null);
 
     const totalPages = lesson.pages.length;
     const isFirstPage = currentPageIndex === 0;
@@ -120,7 +120,7 @@ export const ArticleLessonPlayer: React.FC<ArticleLessonPlayerProps> = ({
     const renderSlide = (
         pageIndex: number,
         animationClass: string | undefined,
-        sentinelRef?: React.RefObject<HTMLDivElement | null>
+        sentinelRef?: React.RefObject<HTMLDivElement>
     ) => {
         const page = lesson.pages[pageIndex];
         return (

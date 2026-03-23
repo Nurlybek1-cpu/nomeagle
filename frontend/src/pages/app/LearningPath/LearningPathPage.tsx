@@ -118,6 +118,7 @@ export const LearningPathPage: React.FC = () => {
     if (
       lesson?.type === "video" ||
       lesson?.type === "article" ||
+      lesson?.type === "summary" ||
       lesson?.type === "flashcards" ||
       lesson?.type === "quiz" ||
       lesson?.type === "scenario" ||
