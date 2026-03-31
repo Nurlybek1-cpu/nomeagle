@@ -23,7 +23,6 @@ const DONUT_SIZE = 160;
 const DONUT_STROKE = 28;
 const DONUT_R = (DONUT_SIZE - DONUT_STROKE) / 2;
 const DONUT_OUTER_R = DONUT_R + DONUT_STROKE / 2;
-const DONUT_INNER_R = DONUT_R - DONUT_STROKE / 2;
 const DONUT_CX = DONUT_SIZE / 2;
 const DONUT_CY = DONUT_SIZE / 2;
 const CIRCUMFERENCE = 2 * Math.PI * DONUT_R;
@@ -36,10 +35,10 @@ const LEGEND_ITEMS = [
 ] as const;
 
 /* Wrapper size for donut + leader lines and labels */
-const CHART_WIDTH = 280;
-const CHART_HEIGHT = 180;
-const DONUT_OX = 60;
-const DONUT_OY = 10;
+const CHART_WIDTH = 340;
+const CHART_HEIGHT = 260;
+const DONUT_OX = 90;
+const DONUT_OY = 50;
 const CENTER_X = DONUT_OX + DONUT_CX;
 const CENTER_Y = DONUT_OY + DONUT_CY;
 
@@ -59,7 +58,6 @@ function DonutChart({ data }: { data: PracticeTimeBreakdown }) {
   }, [typingSeconds, learningSeconds, notPassedSeconds, totalSeconds]);
 
   const outerR = DONUT_OUTER_R;
-  const labelOffset = 48;
 
   /* Segment outer points (midpoint on ring) and label position = segment + outward offset */
   const segmentLabels = useMemo(() => {
@@ -67,7 +65,7 @@ function DonutChart({ data }: { data: PracticeTimeBreakdown }) {
     const lenL = (learningSeconds / total) * CIRCUMFERENCE;
     const lenN = (notPassedSeconds / total) * CIRCUMFERENCE;
     const r = DONUT_R;
-    const toAngle = (s: number) => -Math.PI / 2 - s / r;
+    const toAngle = (s: number) => -Math.PI / 2 + s / r;
     const toOuterPoint = (angle: number) => ({
       x: CENTER_X + outerR * Math.cos(angle),
       y: CENTER_Y + outerR * Math.sin(angle),
@@ -80,12 +78,26 @@ function DonutChart({ data }: { data: PracticeTimeBreakdown }) {
     return midpoints.map((pt) => {
       const ux = (pt.x - CENTER_X) / outerR;
       const uy = (pt.y - CENTER_Y) / outerR;
+      const isRight = ux >= 0;
+
+      const elbowOffset = 20;
+      const textWidth = 45;
+
+      const elbow = {
+        x: pt.x + elbowOffset * ux,
+        y: pt.y + elbowOffset * uy,
+      };
+
+      const end = {
+        x: elbow.x + (isRight ? textWidth : -textWidth),
+        y: elbow.y,
+      };
+
       return {
         ring: pt,
-        label: {
-          x: pt.x + labelOffset * ux,
-          y: pt.y + labelOffset * uy,
-        },
+        elbow,
+        end,
+        isRight,
       };
     });
   }, [typingSeconds, learningSeconds, notPassedSeconds, total]);
@@ -123,18 +135,46 @@ function DonutChart({ data }: { data: PracticeTimeBreakdown }) {
             />
           ))}
         </g>
-        {segmentLabels.map(({ ring, label }, i) => {
-          const color = LEGEND_ITEMS[i].color;
-          const points = `${label.x},${label.y} ${ring.x},${ring.y}`;
+        {segmentLabels.map(({ ring, elbow, end, isRight }, i) => {
+          const item = LEGEND_ITEMS[i];
+          const seconds = secondsByKey[item.key];
+          const points = `${ring.x},${ring.y} ${elbow.x},${elbow.y} ${end.x},${end.y}`;
+          const textAnchor = isRight ? 'end' : 'start';
+          const textX = isRight ? end.x - 6 : end.x + 6;
+
           return (
-            <polyline
-              key={i}
-              points={points}
-              fill="none"
-              stroke={color}
-              strokeWidth="1.5"
-              className={styles.leaderLine}
-            />
+            <g key={item.key}>
+              <polyline
+                points={points}
+                fill="none"
+                stroke={item.color}
+                strokeWidth="1.5"
+                className={styles.leaderLine}
+              />
+              <circle
+                cx={end.x}
+                cy={end.y}
+                r={2.5}
+                fill={item.color}
+              />
+              <text
+                x={textX}
+                y={end.y - 6}
+                className={styles.legendLabelText}
+                textAnchor={textAnchor}
+              >
+                {item.label}
+              </text>
+              <text
+                x={textX}
+                y={end.y + 12}
+                className={styles.legendTimeText}
+                fill={item.color}
+                textAnchor={textAnchor}
+              >
+                {formatHms(seconds)}
+              </text>
+            </g>
           );
         })}
       </svg>
@@ -149,35 +189,6 @@ function DonutChart({ data }: { data: PracticeTimeBreakdown }) {
       >
         <span className={styles.donutTime}>{formatHms(totalSeconds)}</span>
       </div>
-      {segmentLabels.map(({ label }, i) => {
-        const item = LEGEND_ITEMS[i];
-        const seconds = secondsByKey[item.key];
-        const isRight = label.x > CENTER_X;
-        const dotRadius = 4;
-        return (
-          <div
-            key={item.key}
-            className={isRight ? styles.legendItemRight : styles.legendItemLeft}
-            style={
-              isRight
-                ? { left: label.x - dotRadius, top: label.y - dotRadius }
-                : { right: CHART_WIDTH - label.x - dotRadius, top: label.y - dotRadius }
-            }
-          >
-            <span
-              className={styles.legendDot}
-              style={{ background: item.color }}
-              aria-hidden
-            />
-            <div className={styles.legendText}>
-              <span className={styles.legendLabel}>{item.label}</span>
-              <span className={styles.legendTime} style={{ color: item.color }}>
-                {formatHms(seconds)}
-              </span>
-            </div>
-          </div>
-        );
-      })}
     </div>
   );
 }
