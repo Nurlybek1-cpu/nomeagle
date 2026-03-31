@@ -4,7 +4,9 @@ import { LearningPathPage } from '../../pages/app/LearningPath';
 import { CultureMatchRushPage } from '../../pages/app/Game/CultureMatchRushPage';
 import { StreetFoodSprintPage } from '../../pages/app/Game/StreetFoodSprintPage';
 import { FestivalTimelinePage } from '../../pages/app/Game/FestivalTimelinePage';
+import { GuessTheLandmarkPage } from '../../pages/app/Game/GuessTheLandmarkPage';
 import { LessonPage } from '../../pages/app/Lesson';
+import { CountryRoadmapPage } from '../../pages/app/CountryRoadmap/CountryRoadmapPage';
 
 /**
  * Application router.
@@ -20,6 +22,12 @@ export const router = createBrowserRouter([
   {
     path: '/',
     element: <Navigate to="/app/dashboard" replace />,
+  },
+
+  /* New full-screen visual roadmap page */
+  {
+    path: '/learn/:countryCode',
+    element: <CountryRoadmapPage />,
   },
 
   /* Full-screen lesson roadmap (no sidebar/topbar) */
@@ -44,6 +52,12 @@ export const router = createBrowserRouter([
   {
     path: '/app/countries/:countryCode/festival',
     element: <FestivalTimelinePage />,
+  },
+
+  /* Full-screen Guess the Landmark game */
+  {
+    path: '/app/countries/:countryCode/landmarks',
+    element: <GuessTheLandmarkPage />,
   },
 
   /* Full-screen Article Lesson */

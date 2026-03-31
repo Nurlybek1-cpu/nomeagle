@@ -133,7 +133,7 @@ export const MapExplorerPage: React.FC = () => {
 
   const handleEnterCountry = useCallback(() => {
     if (!selectedCountry) return;
-    navigate(`/app/countries/${selectedCountry}`);
+    navigate(`/learn/${selectedCountry}`);
   }, [navigate, selectedCountry]);
 
   let details: MapCountryDetails | null = null;
