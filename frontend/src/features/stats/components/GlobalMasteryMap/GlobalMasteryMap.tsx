@@ -177,13 +177,13 @@ export const GlobalMasteryMap: React.FC<GlobalMasteryMapProps> = ({
           </div>
 
           {/* Right Column: Map Container */}
-          <div className="flex-1 w-full flex items-center justify-center">
-            <div className={`bg-[#f8f9fa] border border-gray-100 shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] rounded-xl overflow-hidden w-full h-auto flex items-center justify-center p-4 min-h-[350px] ${styles.mapContainer}`}>
+          <div className={styles.mapColumn}>
+            <div className={styles.mapWrapper}>
               <ComposableMap
                 projectionConfig={{ scale: 140 }}
                 width={800}
                 height={400}
-                style={{ width: '100%', height: 'auto', maxHeight: '420px' }}
+                className={styles.map}
               >
                   <Geographies geography={geoUrl}>
                     {({ geographies }) =>
@@ -207,7 +207,7 @@ export const GlobalMasteryMap: React.FC<GlobalMasteryMapProps> = ({
                             key={geo.rsmKey}
                             geography={geo}
                             fill={fill}
-                            stroke={isActive ? '#f97316' : '#ffffff'} // Orange highlight if active
+                            stroke={isActive ? '#f97316' : '#ffffff'}
                             strokeWidth={isActive ? 1.5 : 0.6}
                             onClick={() => setActiveCountry(isActive ? null : iso2)}
                             style={{

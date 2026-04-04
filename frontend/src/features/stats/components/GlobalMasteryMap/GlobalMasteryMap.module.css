@@ -1,11 +1,58 @@
 /* ==========================================================================
-   Cultural Mastery Map
+   Cultural Mastery Map – Premium Minimal Redesign
    ========================================================================== */
 
 .card {
   width: 100%;
 }
 
+/* --------------------------------------------------------------------------
+   Map Wrapper – the soft container that holds the map visualization
+   -------------------------------------------------------------------------- */
+.mapWrapper {
+  padding: 16px;
+  background: #f8f9fb;
+  border-radius: 12px;
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.04),
+    0 0 0 1px rgba(0, 0, 0, 0.02);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  transition: box-shadow 0.3s ease;
+}
+
+.mapWrapper:hover {
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.06),
+    0 0 0 1px rgba(0, 0, 0, 0.03);
+}
+
+/* --------------------------------------------------------------------------
+   Map – the SVG visualization itself
+   -------------------------------------------------------------------------- */
+.map {
+  width: 100%;
+  max-width: 600px;
+  height: auto;
+  display: block;
+}
+
+/* --------------------------------------------------------------------------
+   Map Column – right side container
+   -------------------------------------------------------------------------- */
+.mapColumn {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* --------------------------------------------------------------------------
+   Legacy .mapContainer kept for backward compat if referenced elsewhere
+   -------------------------------------------------------------------------- */
 .mapContainer {
   width: 100%;
   height: auto;
@@ -17,11 +64,23 @@
 }
 
 @media (max-width: 768px) {
+  .mapWrapper {
+    padding: 12px;
+    border-radius: 10px;
+  }
+
+  .map {
+    max-width: 100%;
+  }
+
   .mapContainer {
     min-height: 200px;
   }
 }
 
+/* --------------------------------------------------------------------------
+   Toggle Buttons
+   -------------------------------------------------------------------------- */
 .toggleButtonGroup {
   display: inline-flex;
   background-color: #f3f4f6;
@@ -44,10 +103,12 @@
 .toggleButton.active {
   background-color: var(--ne-primary);
   color: #ffffff;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-/* Tips / Footer */
+/* --------------------------------------------------------------------------
+   Tips / Footer
+   -------------------------------------------------------------------------- */
 .tipCard {
   display: flex;
   align-items: center;
@@ -56,7 +117,7 @@
   border: 1px solid var(--ne-border);
   border-radius: 0.5rem;
   background-color: #ffffff;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
 }
 
 .tipText {
