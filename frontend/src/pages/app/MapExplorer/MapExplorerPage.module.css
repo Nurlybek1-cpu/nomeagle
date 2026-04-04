@@ -105,7 +105,7 @@
 }
 
 .panelHeader {
-  padding: var(--ne-3) var(--ne-3) var(--ne-2) var(--ne-3);
+  padding: var(--ne-4) var(--ne-4) var(--ne-3) var(--ne-4);
   background-color: var(--ne-surface);
   border-bottom: 1px solid var(--ne-border);
   flex-shrink: 0;
@@ -119,12 +119,12 @@
 }
 
 .panelContent {
-  padding: var(--ne-2) var(--ne-3) var(--ne-3);
+  padding: var(--ne-3) var(--ne-4) var(--ne-4);
   flex: 1;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: var(--ne-2);
+  gap: var(--ne-3);
 }
 
 /* ---------- Country details content ---------- */
@@ -132,9 +132,8 @@
   width: 100%;
   aspect-ratio: 16 / 9;
   background: var(--ne-bg);
-  border-radius: var(--ne-radius-sm);
+  border-radius: var(--ne-radius-md);
   overflow: hidden;
-  margin-bottom: var(--ne-2);
 }
 
 .heroImage {
@@ -146,7 +145,7 @@
 .metaRow {
   display: flex;
   align-items: flex-start;
-  gap: var(--ne-2);
+  gap: var(--ne-3);
 }
 
 .flag {
@@ -186,7 +185,7 @@
   font-size: 0.9375rem;
   color: var(--ne-text);
   line-height: 1.5;
-  padding: var(--ne-2) 0;
+  padding: var(--ne-3) 0;
   border-top: 1px solid var(--ne-border);
   border-bottom: 1px solid var(--ne-border);
 }
@@ -220,8 +219,8 @@
 
 .infoBox {
   background-color: var(--ne-bg);
-  border-radius: var(--ne-radius-sm);
-  padding: var(--ne-2);
+  border-radius: var(--ne-radius-md);
+  padding: var(--ne-3);
   border: 1px solid var(--ne-border);
 }
 
