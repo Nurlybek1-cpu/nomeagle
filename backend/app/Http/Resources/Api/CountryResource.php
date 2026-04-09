@@ -16,13 +16,14 @@ class CountryResource extends JsonResource
             'slug' => $this->slug,
             'region' => $this->region,
             'description' => $this->description,
-            'flag_path' => $this->flag_path,
-            'flag_url' => $this->flag_path
+            'flagPath' => $this->flag_path,
+            'flagUrl' => $this->flag_path
                 ? Storage::disk('public')->url($this->flag_path)
                 : null,
-            'is_active' => $this->is_active,
-            'created_at' => $this->created_at?->toISOString(),
-            'updated_at' => $this->updated_at?->toISOString(),
+            'isActive' => $this->is_active,
+            'ethnicGroups' => $this->ethnic_groups ?? [],
+            'createdAt' => $this->created_at?->toISOString(),
+            'updatedAt' => $this->updated_at?->toISOString(),
         ];
     }
 }

@@ -1,6 +1,7 @@
 import { Navigate } from 'react-router-dom';
 import type { RouteObject } from 'react-router-dom';
 import { AppLayout } from '../../layouts/AppLayout';
+import { ProtectedRoute } from './guards';
 import { AchievementsPage } from '../../pages/app/Achievements';
 import { DashboardPage } from '../../pages/app/Dashboard';
 import { LeaderboardPage } from '../../pages/app/Leaderboard';
@@ -33,7 +34,11 @@ import { StatisticsPage } from '../../pages/app/Statistics';
 export const appRoutes: RouteObject[] = [
   {
     path: '/app',
-    element: <AppLayout />,
+    element: (
+      <ProtectedRoute>
+        <AppLayout />
+      </ProtectedRoute>
+    ),
     children: [
       /* /app → redirect to dashboard */
       { index: true, element: <Navigate to="dashboard" replace /> },

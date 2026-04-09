@@ -5,21 +5,16 @@ import { SearchInput } from '../../../components/ui/SearchInput';
 import { Loading, EmptyState, ErrorState } from '../../../components/feedback';
 import { CountryCatalogCard } from '../../../features/countries/components/CountryCatalogCard';
 import { RegionFilters } from '../../../features/countries/components/RegionFilters';
-import { COUNTRIES_CATALOG, addLearningCountry } from '../../../features/countries/data';
-import type { CatalogCountry } from '../../../features/countries/data';
+import { addLearningCountry } from '../../../features/countries/data';
+import { useCountries } from '../../../features/countries/hooks/useCountries';
+import type { Country } from '../../../types/models';
 import styles from './SearchCountriesPage.module.css';
 
 /* ==========================================================================
    Types
    ========================================================================== */
 
-type AsyncStatus = 'idle' | 'loading' | 'success' | 'error';
 
-interface AsyncState<T> {
-  status: AsyncStatus;
-  data?: T;
-  error?: string;
-}
 
 
 /* ==========================================================================
@@ -50,28 +45,11 @@ export const SearchCountriesPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedRegions, setSelectedRegions] = useState<string[]>([]);
   const [selectedEthnicGroups, setSelectedEthnicGroups] = useState<string[]>([]);
-  const [state, setState] = useState<AsyncState<CatalogCountry[]>>({
-    status: 'success',
-    data: COUNTRIES_CATALOG,
-  });
-
-  /* ---- Simulate loading (for demo purposes, can remove) ---- */
-  const simulateLoading = () => {
-    setState({ status: 'loading' });
-    setTimeout(() => {
-      setState({ status: 'success', data: COUNTRIES_CATALOG });
-    }, 1500);
-  };
-
-  /* ---- Simulate error (for demo purposes, can remove) ---- */
-  const simulateError = () => {
-    setState({ status: 'error', error: 'Failed to load countries. Please try again.' });
-  };
+  const { data: countries = [] as Country[], isLoading, isError, error, refetch } = useCountries();
 
   /* ---- Filter: Search (name only) + Regions (+ ethnic groups). Fast, single pass. ---- */
   const filteredCountries = useMemo(() => {
-    const data = state.data;
-    if (!data || data.length === 0) return [];
+    if (countries.length === 0) return [];
 
     const searchTerm = searchQuery.trim().toLowerCase();
     const hasSearch = searchTerm.length > 0;
@@ -82,7 +60,7 @@ export const SearchCountriesPage: React.FC = () => {
       ? new Set(selectedEthnicGroups)
       : null;
 
-    return data.filter((country) => {
+    return countries.filter((country: Country) => {
       if (hasRegionFilter && regionSet && !regionSet.has(country.region))
         return false;
       if (
@@ -95,7 +73,7 @@ export const SearchCountriesPage: React.FC = () => {
         return false;
       return true;
     });
-  }, [state.data, searchQuery, selectedRegions, selectedEthnicGroups]);
+  }, [countries, searchQuery, selectedRegions, selectedEthnicGroups]);
 
   /* ---- Handlers ---- */
   const handleSearchChange = useCallback((value: string) => {
@@ -124,12 +102,8 @@ export const SearchCountriesPage: React.FC = () => {
     [navigate]
   );
 
-  const handleRetry = () => {
-    simulateLoading();
-  };
-
   /* ---- Render: Loading ---- */
-  if (state.status === 'loading' || state.status === 'idle') {
+  if (isLoading) {
     return (
       <div className={styles.page}>
         <header className={styles.header}>
@@ -154,7 +128,7 @@ export const SearchCountriesPage: React.FC = () => {
   }
 
   /* ---- Render: Error ---- */
-  if (state.status === 'error') {
+  if (isError) {
     return (
       <div className={styles.page}>
         <header className={styles.header}>
@@ -174,7 +148,7 @@ export const SearchCountriesPage: React.FC = () => {
         <main className={styles.main}>
           <Card>
             <CardContent>
-              <ErrorState message={state.error} onRetry={handleRetry} />
+              <ErrorState message={error instanceof Error ? error.message : 'Unknown error'} onRetry={() => refetch()} />
             </CardContent>
           </Card>
         </main>
@@ -183,7 +157,7 @@ export const SearchCountriesPage: React.FC = () => {
   }
 
   /* ---- Render: Empty (no countries at all) ---- */
-  if (!state.data || state.data.length === 0) {
+  if (countries.length === 0) {
     return (
       <div className={styles.page}>
         <header className={styles.header}>
@@ -260,12 +234,12 @@ export const SearchCountriesPage: React.FC = () => {
             <Card className={styles.catalogCard}>
               <CardContent className={styles.catalogCardContent}>
                 <div className={styles.grid}>
-                  {filteredCountries.map((country) => (
+                  {filteredCountries.map((country: Country) => (
                     <CountryCatalogCard
-                      key={country.code}
-                      code={country.code}
+                      key={country.slug}
+                      code={country.slug}
                       name={country.name}
-                      description={country.description}
+                      description={country.description || ''}
                       onLearn={handleLearn}
                     />
                   ))}

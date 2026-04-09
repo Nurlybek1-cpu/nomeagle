@@ -7,6 +7,8 @@ import { FestivalTimelinePage } from '../../pages/app/Game/FestivalTimelinePage'
 import { GuessTheLandmarkPage } from '../../pages/app/Game/GuessTheLandmarkPage';
 import { LessonPage } from '../../pages/app/Lesson';
 import { CountryRoadmapPage } from '../../pages/app/CountryRoadmap/CountryRoadmapPage';
+import { AuthLayout } from '../../layouts/AuthLayout';
+import { LoginPage, RegisterPage } from '../../pages/auth';
 
 /**
  * Application router.
@@ -22,6 +24,21 @@ export const router = createBrowserRouter([
   {
     path: '/',
     element: <Navigate to="/app/dashboard" replace />,
+  },
+
+  /* Auth Routes */
+  {
+    element: <AuthLayout />,
+    children: [
+      {
+        path: '/login',
+        element: <LoginPage />,
+      },
+      {
+        path: '/register',
+        element: <RegisterPage />,
+      },
+    ],
   },
 
   /* New full-screen visual roadmap page */

@@ -66,3 +66,22 @@ export interface CountryProgress {
   /** Title of the last completed lesson (undefined if none) */
   lastLessonTitle?: string;
 }
+
+/* --------------------------------------------------------------------------
+   Country Data Model
+   -------------------------------------------------------------------------- */
+
+/** Fully detailed country record mapped from Laravel API */
+export interface Country {
+  id: number;
+  slug: string;
+  name: string;
+  region: Region | string;
+  description: string | null;
+  flagPath: string | null;
+  flagUrl: string | null;
+  isActive: boolean;
+  ethnicGroups?: string[];
+  createdAt: string;
+  updatedAt: string;
+}
