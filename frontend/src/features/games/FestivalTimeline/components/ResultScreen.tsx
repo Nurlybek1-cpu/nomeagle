@@ -1,9 +1,11 @@
 import React from 'react';
 import { useFestivalStore } from '../store/useFestivalStore';
+import { useGameCompletion } from '../../../map-roadmap/components/GameLauncher/GameCompletionContext';
 import styles from '../FestivalTimeline.module.css';
 
 export const ResultScreen: React.FC = () => {
     const { scoreDetails, mistakesMade, reset, mode, festivals } = useFestivalStore();
+    const completion = useGameCompletion();
 
     const totalPossible = festivals.length;
     const accuracy = totalPossible > 0 ? ((totalPossible - mistakesMade) / totalPossible) * 100 : 0;
@@ -59,9 +61,20 @@ export const ResultScreen: React.FC = () => {
                     </div>
                 )}
 
-                <button className={styles.playBtn} onClick={reset}>
-                    PLAY AGAIN
-                </button>
+                <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
+                    <button className={styles.playBtn} onClick={reset}>
+                        PLAY AGAIN
+                    </button>
+                    {completion && (
+                        <button
+                            className={styles.playBtn}
+                            onClick={() => completion.onComplete()}
+                            style={{ background: 'linear-gradient(135deg, #16a34a, #22c55e)' }}
+                        >
+                            COMPLETE ✓
+                        </button>
+                    )}
+                </div>
             </div>
         </div>
     );

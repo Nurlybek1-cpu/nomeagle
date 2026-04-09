@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useGameCompletion } from '../../map-roadmap/components/GameLauncher/GameCompletionContext';
 import styles from './GuessTheLandmark.module.css';
 
 export interface LandmarkOption {
@@ -61,6 +62,7 @@ export const GuessTheLandmark: React.FC<GuessTheLandmarkProps> = ({
 
   const [personalBest, setPersonalBest] = useState(0);
   const [comboStreak, setComboStreak] = useState(0);
+  const completion = useGameCompletion();
 
   useEffect(() => {
     try {
@@ -261,22 +263,38 @@ export const GuessTheLandmark: React.FC<GuessTheLandmarkProps> = ({
               </p>
             </div>
             
-            <button
-              onClick={() => {
-                setBlurValue(MAX_BLUR);
-                setIsGameOver(false);
-                setHasWon(false);
-                setScore(0);
-                setIncorrectGuesses(new Set());
-                onNext?.();
-              }}
-              className={styles.nextBtn}
-            >
-              Next Landmark
-              <svg xmlns="http://www.w3.org/2000/svg" className={styles.nextBtnIcon} viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
-              </svg>
-            </button>
+            <div style={{ display: 'flex', gap: '10px', width: '100%' }}>
+              <button
+                onClick={() => {
+                  setBlurValue(MAX_BLUR);
+                  setIsGameOver(false);
+                  setHasWon(false);
+                  setScore(0);
+                  setIncorrectGuesses(new Set());
+                  onNext?.();
+                }}
+                className={styles.nextBtn}
+                style={completion ? { flex: 1 } : { width: '100%' }}
+              >
+                Next Landmark
+                <svg xmlns="http://www.w3.org/2000/svg" className={styles.nextBtnIcon} viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                </svg>
+              </button>
+              {completion && (
+                <button
+                  onClick={() => completion.onComplete()}
+                  className={styles.nextBtn}
+                  style={{
+                    flex: 1,
+                    background: 'linear-gradient(135deg, #16a34a, #22c55e)',
+                    borderColor: '#16a34a',
+                  }}
+                >
+                  Complete ✓
+                </button>
+              )}
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

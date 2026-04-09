@@ -1,7 +1,15 @@
 import React from "react";
 import styles from "./CountryRoadmap.module.css";
-import { CountryRoadmap as CountryRoadmapType } from "../../types";
+import { CountryRoadmap as CountryRoadmapType, GameType } from "../../types";
 import { RoadPath } from "../RoadPath/RoadPath";
+
+/* Maps each game type to an emoji/icon rendered inside the node */
+const GAME_ICONS: Record<GameType, string> = {
+  CultureMatchRush: "🃏",
+  FestivalTimeline: "🎉",
+  GuessTheLandmark: "🏛️",
+  StreetFoodSprint: "🍜",
+};
 
 interface CountryRoadmapProps {
   /** The full roadmap model data (e.g. Kazakhstan) */
@@ -27,7 +35,7 @@ export const CountryRoadmap: React.FC<CountryRoadmapProps> = ({
         {/* Nodes Overlay positioned relatively over the map image */}
         <div className={styles.nodesOverlay}>
           <RoadPath nodes={roadmap.nodes} />
-          {roadmap.nodes.map((node) => {
+          {roadmap.nodes.map((node, index) => {
             // Determine the state class (Duolingo style)
             let stateClass = "";
             if (node.isCompleted) {
@@ -47,14 +55,9 @@ export const CountryRoadmap: React.FC<CountryRoadmapProps> = ({
                   top: `${node.position.y}%`,
                 }}
               >
-                {/* 
-                  Temporary "Mock" Node implementation. 
-                  This div structure acts as a placeholder for a future rich GameNodeComponent 
-                  while fulfilling the current interactive requirement. 
-                */}
                 <div
                   className={`${styles.mockNode} ${stateClass}`}
-                  title={node.title} // Native tooltip for clarity
+                  title={node.title}
                   onClick={() => {
                     if (!node.isLocked && onNodeClick) {
                       onNodeClick(node.id);
@@ -63,8 +66,11 @@ export const CountryRoadmap: React.FC<CountryRoadmapProps> = ({
                   role="button"
                   tabIndex={node.isLocked ? -1 : 0}
                   aria-disabled={node.isLocked}
+                  aria-label={`Level ${index + 1}: ${node.title}`}
                 >
-                  {/* We can place an icon based on node.gameType here later */}
+                  <span className={styles.nodeIcon} aria-hidden="true">
+                    {GAME_ICONS[node.gameType]}
+                  </span>
                 </div>
               </div>
             );
@@ -74,3 +80,4 @@ export const CountryRoadmap: React.FC<CountryRoadmapProps> = ({
     </div>
   );
 };
+

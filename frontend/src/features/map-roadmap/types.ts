@@ -1,4 +1,8 @@
-export type GameType = "quiz" | "flashcards" | "matching" | "scenario";
+export type GameType =
+  | "CultureMatchRush"
+  | "FestivalTimeline"
+  | "GuessTheLandmark"
+  | "StreetFoodSprint";
 
 export interface Position {
   /** X coordinate as a percentage (0-100) for responsive positioning */

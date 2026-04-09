@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useSprintStore } from '../store/useSprintStore';
+import { useGameCompletion } from '../../../map-roadmap/components/GameLauncher/GameCompletionContext';
 import type { TappedFood } from '../types';
 import styles from '../StreetFoodSprint.module.css';
 
@@ -26,6 +27,7 @@ export const PostGameReview: React.FC = () => {
     configure, startCountdown, reset,
     targetCountryId,
   } = useSprintStore();
+  const completion = useGameCompletion();
 
   const [expandedCard, setExpandedCard] = useState<string | null>(null);
   const [cards] = useState(() => pickLearningCards(tappedFoods));
@@ -42,7 +44,11 @@ export const PostGameReview: React.FC = () => {
 
   const handleDone = () => {
     reset();
-    window.history.back();
+    if (completion) {
+      completion.onComplete();
+    } else {
+      window.history.back();
+    }
   };
 
   return (

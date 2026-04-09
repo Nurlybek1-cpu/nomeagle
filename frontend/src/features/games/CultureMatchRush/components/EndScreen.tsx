@@ -1,10 +1,12 @@
 import React from 'react';
 import { useGameStore } from '../store/useGameStore';
 import { motion } from 'framer-motion';
+import { useGameCompletion } from '../../../map-roadmap/components/GameLauncher/GameCompletionContext';
 import styles from '../CultureMatchRush.module.css';
 
 export const EndScreen: React.FC = () => {
   const { score, correctCount, incorrectCount, maxCombo, xpGained, level, initializeGame } = useGameStore();
+  const completion = useGameCompletion();
 
   const totalAttempts = correctCount + incorrectCount;
   const accuracy = totalAttempts > 0 ? Math.round((correctCount / totalAttempts) * 100) : 100;
@@ -71,8 +73,17 @@ export const EndScreen: React.FC = () => {
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
             Retry
           </button>
-          <button onClick={() => window.history.back()} className={`${styles.btn} ${styles.btnPrimary}`}>
-            Next 
+          <button
+            onClick={() => {
+              if (completion) {
+                completion.onComplete();
+              } else {
+                window.history.back();
+              }
+            }}
+            className={`${styles.btn} ${styles.btnPrimary}`}
+          >
+            {completion ? 'Complete ✓' : 'Next'}
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
           </button>
         </div>
